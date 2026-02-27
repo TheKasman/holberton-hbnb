@@ -30,6 +30,10 @@ class InMemoryRepository(Repository):
     def __init__(self):
         self._storage = {}
 
+    #  Only runs during pytest to clear out preexisting data
+    def clear(self):
+        self._storage = {}
+
     def add(self, obj):
         self._storage[obj.id] = obj
 
