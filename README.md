@@ -3,6 +3,14 @@
 This repository contains the deliverables for Part 1 of the HBnB project.  
 The focus of this stage is on system design, including architecture planning, class modelling, and behavioural analysis through sequence diagrams.
 
+## Setup
+
+```bash
+pip install -r requirements.txt
+python run.py
+```
+---
+
 ## 📁 Repository Contents
 
 ### /Part1/class_diagrams/
