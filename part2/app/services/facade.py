@@ -1,5 +1,6 @@
 from app.persistence.repository import InMemoryRepository
 import uuid
+from app.models.user import User
 
 class HBnBFacade:
     def __init__(self):
@@ -8,10 +9,21 @@ class HBnBFacade:
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
-    # Placeholder method for creating a user
+    #  Method for creating a user
     def create_user(self, user_data):
-        # Logic will be implemented in later tasks
-        pass
+        user = User(**user_data)
+        self.user_repo.add(user)
+        return user
+
+
+    #  Gets the user
+    def get_user(self, user_id):
+        return self.user_repo.get(user_id)
+    
+
+    #  Gets the user's email
+    def get_user_by_email(self, email):
+        return self.user_repo.get_by_attribute('email', email)
 
     # Placeholder method for fetching a place by ID
     def get_place(self, place_id):
