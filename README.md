@@ -10,7 +10,7 @@ The focus of this stage is on system design, including architecture planning, cl
 pip install -r requirements.txt
 ```
 
-The `requirements.txt` file should contain:
+The `requirements.txt` file contains:
 
 ```
 flask
