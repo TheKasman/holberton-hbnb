@@ -1,6 +1,7 @@
 from app.persistence.repository import InMemoryRepository
 import uuid
 from app.models.user import User
+from app.models.amenity import Amenity
 
 class HBnBFacade:
     def __init__(self):
@@ -9,6 +10,10 @@ class HBnBFacade:
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
+    # ==========================================================================
+    # USER METHODS
+    # ==========================================================================
+    
     #  Method for creating a user
     def create_user(self, user_data):
         user = User(**user_data)
@@ -25,11 +30,19 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
 
+    # ==========================================================================
+    # PLACE METHODS
+    # ==========================================================================
+    
     # Placeholder method for fetching a place by ID
     def get_place(self, place_id):
         # Logic will be implemented in later tasks
         pass
 
+
+    # ==========================================================================
+    # REVIEW METHODS
+    # ==========================================================================
 
     # Placeholder methods for creating a review
     def create_review(self, review_data):
@@ -103,3 +116,35 @@ class HBnBFacade:
         # deletes the review from the review repository
         self.review_repo.delete(review_id)
         return True
+
+
+    # ==========================================================================
+    # AMENITY METHODS
+    # ==========================================================================
+    
+    # Create an amenity
+    def create_amenity(self, amenity_data):
+        """Create a new amenity and store it in the repository."""
+        amenity = Amenity(name=amenity_data['name'])
+        self.amenity_repo.add(amenity)
+        return amenity
+
+    # Retrieve an amenity by ID
+    def get_amenity(self, amenity_id):
+        """Retrieve an amenity by its ID."""
+        return self.amenity_repo.get(amenity_id)
+
+    # Retrieve all amenities
+    def get_all_amenities(self):
+        """Retrieve all amenities."""
+        return self.amenity_repo.get_all()
+
+    # Update an amenity
+    def update_amenity(self, amenity_id, amenity_data):
+        """Update an existing amenity's data."""
+        amenity = self.amenity_repo.get(amenity_id)
+        if not amenity:
+            return None
+        amenity.update(amenity_data)
+        self.amenity_repo.update(amenity_id, amenity)
+        return amenity
