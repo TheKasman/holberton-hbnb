@@ -5,8 +5,21 @@ The focus of this stage is on system design, including architecture planning, cl
 
 ## Setup
 
+1. Install the required packages:
 ```bash
 pip install -r requirements.txt
+```
+
+The `requirements.txt` file should contain:
+
+```
+flask
+flask-restx
+```
+
+2. Run the application:
+
+```bash
 python run.py
 ```
 ---
