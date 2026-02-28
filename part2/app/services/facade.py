@@ -2,6 +2,7 @@ from app.persistence.repository import InMemoryRepository
 import uuid
 from app.models.user import User
 from app.models.amenity import Amenity
+from app.models.place import Place
 
 class HBnBFacade:
     def __init__(self):
@@ -33,11 +34,51 @@ class HBnBFacade:
     # ==========================================================================
     # PLACE METHODS
     # ==========================================================================
-    
-    # Placeholder method for fetching a place by ID
+
+    def create_place(self, place_data):
+        # Ensure required fields
+        req_fields = ["title", "price", "latitude", "longitude", "owner_id"]
+        for field in req_fields:
+            if field not in place_data:
+                raise ValueError(f"Missing required field: {field}")
+
+        # Validate owner exists
+        owner = self.user_repo.get(place_data["owner_id"])
+        if not owner:
+            raise ValueError("Owner not found")
+
+        place = Place(
+            title=place_data["title"],
+            description=place_data.get("description", ""),
+            price=place_data["price"],
+            latitude=place_data["latitude"],
+            longitude=place_data["longitude"],
+            owner=owner
+        )
+
+        self.place_repo.add(place)
+        return place
+
     def get_place(self, place_id):
-        # Logic will be implemented in later tasks
-        pass
+        return self.place_repo.get(place_id)
+
+    def get_all_places(self):
+        return self.place_repo.get_all()
+
+    def update_place(self, place_id, place_data):
+        place = self.get_place(place_id)
+        if not place:
+            raise ValueError("Place not found")
+        place.update(place_data)
+        self.place_repo.update(place_id, place)
+        return place
+
+    # def delete_place(self, place_id):
+    #     place = self.get_place(place_id)
+    #     if not place:
+    #         raise ValueError("Place not found")
+    #     self.place_repo.delete(place_id)
+    #     return True
 
 
     # ==========================================================================
