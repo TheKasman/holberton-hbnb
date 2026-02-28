@@ -21,7 +21,7 @@ class User(BaseModel):
         #  Email structure validation. 
         #  I.e. permits emails with underscores, dots etc.
         email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-        if not re.match()(email_regex, email):
+        if not re.match(email_regex, email):
             raise ValueError("Invalid email format")
         
         if not isinstance(is_admin, bool):
