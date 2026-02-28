@@ -1,4 +1,4 @@
-import pytest
+from app.models.review import Review #  Keeping this here just in case we need to instansiate a review
 
 def test_create_review_success(app):
     client = app.test_client()
