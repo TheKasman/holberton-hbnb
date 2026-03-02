@@ -46,7 +46,8 @@ class HBnBFacade:
         owner = self.user_repo.get(place_data["owner_id"])
         if not owner:
             raise ValueError("Owner not found")
-
+        
+        # Create place
         place = Place(
             title=place_data["title"],
             description=place_data.get("description", ""),
@@ -56,8 +57,14 @@ class HBnBFacade:
             owner=owner
         )
 
-        # Validate each amenity ID exists before attaching to the place
-        for amenity_id in place_data.get("amenities", []):
+       # Amenities via amenity_ids
+        amenity_ids = place_data.get("amenity_ids", [])
+
+        if not isinstance(amenity_ids, list):
+            raise ValueError("amenity_ids must be a list")
+
+        # Validate and attach amenities
+        for amenity_id in amenity_ids:
             amenity = self.amenity_repo.get(amenity_id)
             if not amenity:
                 raise ValueError(f"Amenity '{amenity_id}' not found")
@@ -79,13 +86,6 @@ class HBnBFacade:
         place.update(place_data)
         self.place_repo.update(place_id, place)
         return place
-
-    # def delete_place(self, place_id):
-    #     place = self.get_place(place_id)
-    #     if not place:
-    #         raise ValueError("Place not found")
-    #     self.place_repo.delete(place_id)
-    #     return True
 
 
     # ==========================================================================
