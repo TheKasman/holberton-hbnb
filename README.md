@@ -25,7 +25,7 @@ flask-restx
 3. Run the application:
 
 ```bash
-python run.py
+python3 run.py
 ```
 ---
 
