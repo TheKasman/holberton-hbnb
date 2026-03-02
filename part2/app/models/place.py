@@ -5,28 +5,47 @@ from app.models.amenity import Amenity
 
 
 class Place(BaseModel):
-    """Place business object defined according to Part 2 requirements """
+    """
+    Place business object defined according to Part 2 requirements.
+    """
 
-    def __init__(self, title, description="", price=0.0,
+    def __init__(self, title, description="", price=None,
                  latitude=None, longitude=None, owner=None):
         super().__init__()
 
-        # Required fields validation
+        # ==========================
+        # Title Validation (Required, max 100 chars)
+        # ==========================
         if not title or not isinstance(title, str) or len(title) > 100:
             raise ValueError("Place title must be a non-empty string up to 100 characters")
-        if price < 0:
-            raise ValueError("Price must be a positive float")
 
-        # Coordinates validation
-        if latitude is not None and not (-90.0 <= latitude <= 90.0):
+        # ==========================
+        # Price Validation (Must be positive)
+        # ==========================
+        if not isinstance(price, (int, float)) or price <= 0:
+            raise ValueError("Price must be a positive value")
+
+        # ==========================
+        # Latitude Validation (Required, -90 to 90)
+        # ==========================
+        if latitude is None or not (-90.0 <= latitude <= 90.0):
             raise ValueError("Latitude must be between -90.0 and 90.0")
-        if longitude is not None and not (-180.0 <= longitude <= 180.0):
+
+        # ==========================
+        # Longitude Validation (Required, -180 to 180)
+        # ==========================
+        if longitude is None or not (-180.0 <= longitude <= 180.0):
             raise ValueError("Longitude must be between -180.0 and 180.0")
 
-        # Owner validation
-        if owner is not None and not isinstance(owner, User):
+        # ==========================
+        # Owner Validation (Required, must be User instance)
+        # ==========================
+        if not isinstance(owner, User):
             raise ValueError("Owner must be a User instance")
 
+        # ==========================
+        # Assign Attributes
+        # ==========================
         self.title = title
         self.description = description
         self.price = price
@@ -38,14 +57,26 @@ class Place(BaseModel):
         self.reviews = []
         self.amenities = []
 
+    # ==========================================================
+    # Relationship Methods
+    # ==========================================================
+
     def add_review(self, review):
-        """Add a Review instance to this place."""
+        """
+        Add a Review instance to this place.
+        """
         if not isinstance(review, Review):
             raise ValueError("review must be a Review instance")
-        self.reviews.append(review)
+
+        if review not in self.reviews:
+            self.reviews.append(review)
 
     def add_amenity(self, amenity):
-        """Add an Amenity instance to this place."""
+        """
+        Add an Amenity instance to this place.
+        """
         if not isinstance(amenity, Amenity):
             raise ValueError("amenity must be an Amenity instance")
-        self.amenities.append(amenity)
+
+        if amenity not in self.amenities:
+            self.amenities.append(amenity)
