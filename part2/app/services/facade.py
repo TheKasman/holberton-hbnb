@@ -3,6 +3,7 @@ import uuid
 from app.models.user import User
 from app.models.amenity import Amenity
 from app.models.place import Place
+from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
@@ -99,28 +100,25 @@ class HBnBFacade:
             if field not in review_data:
                 raise ValueError(f"Missing required field: {field}")
             
-            if not 1 <= review_data['rating'] <= 5:
-                raise ValueError("Rating must be between 1 and 5")
+        if not 1 <= review_data['rating'] <= 5:
+            raise ValueError("Rating must be between 1 and 5")
             
-            # check if user exists
-            user = self.get_user(review_data['user_id'])
-            if not user:
-                raise ValueError("User not found")
+        # check if user exists
+        user = self.get_user(review_data['user_id'])
+        if not user:
+            raise ValueError("User not found")
             
-            # check if place exists
-            place = self.get_place(review_data['place_id'])
-            if not place:
-                raise ValueError("Place not found")
+        # check if place exists
+        place = self.get_place(review_data['place_id'])
+        if not place:
+            raise ValueError("Place not found")
             
-            review = { 
-                "id": str(uuid.uuid4()),
-                "text": review_data['text'],
-                "rating": review_data['rating'],
-                "user_id": review_data['user_id'],
-                "place_id": review_data['place_id']
-            }
-            self.review_repo.add(review)
-            return review
+        review = Review(**review_data)
+        self.review_repo.add(review)
+
+        # attached the review to the place object so it's up to date
+        place.add_review(review)
+        return review
 
     def get_review(self, review_id):
         # gets a review by ID from the review repository
@@ -137,7 +135,7 @@ class HBnBFacade:
         
         # filters reviews by place_id and returns the list of reviews for that place
         reviews = self.review_repo.get_all()
-        return [review for review in reviews if review['place_id'] == place_id]
+        return [review for review in reviews if review.place_id == place_id]
 
     def update_review(self, review_id, review_data):
         review = self.get_review(review_id)
@@ -146,12 +144,12 @@ class HBnBFacade:
         
         # updates the review's text and rating based on the provided review_data
         if 'text' in review_data:
-            review['text'] = review_data['text']
+            review.text = review_data['text']
 
         if 'rating' in review_data:
             if not 1 <= review_data['rating'] <= 5:
                 raise ValueError("Rating must be between 1 and 5")
-            review['rating'] = review_data['rating']
+            review.rating = review_data['rating']
         
         self.review_repo.update(review_id, review)
         return review
