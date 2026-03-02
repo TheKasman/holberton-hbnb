@@ -56,6 +56,13 @@ class HBnBFacade:
             owner=owner
         )
 
+        # Validate each amenity ID exists before attaching to the place
+        for amenity_id in place_data.get("amenities", []):
+            amenity = self.amenity_repo.get(amenity_id)
+            if not amenity:
+                raise ValueError(f"Amenity '{amenity_id}' not found")
+            place.add_amenity(amenity)
+
         self.place_repo.add(place)
         return place
 
