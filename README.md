@@ -7,7 +7,7 @@ The focus of this stage is on system design, including architecture planning, cl
 1. Clone the repository
 ```bash
 git clone https://github.com/TheKasman/holberton-hbnb.git
-cd holbertonschool-hbnb/part2
+cd holberton-hbnb/part2
 ```
 
 2. Install the required packages:
