@@ -36,16 +36,9 @@ POST /api/v1/users/
       "email": "john.doe@example.com"
     }'
 
-### Expected Result
-
-- HTTP 201 Created
-- JSON containing: id, first_name, last_name, email
-
 ### Actual Result
 
-Status:
-
-    HTTP/1.1 201 CREATED
+Status: HTTP/1.1 201 CREATED
 
 Response:
 
@@ -79,17 +72,9 @@ POST /api/v1/places/
       "owner_id": "fd0aa49d-2b75-45cd-9066-89a8c7a07209"
     }'
 
-### Expected Result
-
-- HTTP 201 Created
-- JSON containing id, title, description, price, latitude, longitude,
-  owner_id
-
 ### Actual Result
 
-Status:
-
-    HTTP/1.1 201 CREATED
+Status: HTTP/1.1 201 CREATED
 
 Response:
 
@@ -109,31 +94,43 @@ Result: PASS
 
 ---
 
-## 3. Create Place -- Missing Required Field (title)
+## 3. GET All Places
+
+### Endpoint
+
+GET /api/v1/places/
 
 ### cURL Command
 
-    curl -i -X POST "http://127.0.0.1:5000/api/v1/places/" -H "Content-Type: application/json" -d '{
-      "price": 100,
-      "latitude": 10,
-      "longitude": 20,
-      "owner_id": "fd0aa49d-2b75-45cd-9066-89a8c7a07209"
-    }'
+    curl -i -X GET "http://127.0.0.1:5000/api/v1/places/"
 
-### Actual Result
+Result: PASS
 
-Status:
+---
 
-    HTTP/1.1 400 BAD REQUEST
+## 4. GET Specific Place
+
+### cURL Command
+
+    curl -i -X GET "http://127.0.0.1:5000/api/v1/places/91ba90de-ab00-44b9-8159-2293aced8c6d"
+
+Result: PASS
+
+---
+
+## 5. GET Non-Existent Place
+
+### cURL Command
+
+    curl -i -X GET "http://127.0.0.1:5000/api/v1/places/nonexistent-id"
+
+Status: HTTP/1.1 404 NOT FOUND
 
 Response:
 
 ```json
 {
-  "errors": {
-    "title": "'title' is a required property"
-  },
-  "message": "Input payload validation failed"
+  "error": "Place not found"
 }
 ```
 
@@ -141,23 +138,64 @@ Result: PASS
 
 ---
 
-## 4. Create Place -- Invalid Price (Negative Value)
+## 6. PUT Update Place -- Valid Case
 
 ### cURL Command
 
-    curl -i -X POST "http://127.0.0.1:5000/api/v1/places/" -H "Content-Type: application/json" -d '{
-      "title": "Invalid Price",
-      "price": -10,
-      "latitude": 10,
-      "longitude": 20,
-      "owner_id": "fd0aa49d-2b75-45cd-9066-89a8c7a07209"
+    curl -i -X PUT "http://127.0.0.1:5000/api/v1/places/91ba90de-ab00-44b9-8159-2293aced8c6d" -H "Content-Type: application/json" -d '{
+      "price": 180
     }'
 
-### Actual Result
+Status: HTTP/1.1 200 OK
 
-Status:
+Result: PASS
 
-    HTTP/1.1 400 BAD REQUEST
+---
+
+## 7. PUT Update Place -- Validation Bug Discovery
+
+### Initial Issue
+
+Updating price with negative value returned: - HTTP 200 OK - Negative
+price accepted
+
+### Root Cause
+
+Validation existed only in the constructor. Repository update directly
+modified attributes without validation.
+
+### Fix Implemented
+
+Overrode update() method in Place model to enforce validation rules.
+
+---
+
+## 8. PUT Update Place -- Incorrect Status Code Bug
+
+### Initial Issue
+
+Validation error returned 404 instead of 400.
+
+### Root Cause
+
+PUT endpoint returned 404 for all ValueError exceptions.
+
+### Fix Implemented
+
+Updated PUT handler to: - Return 404 only for missing resource - Return
+400 for validation errors
+
+---
+
+## 9. PUT Update Place -- Invalid Price (After Fix)
+
+### cURL Command
+
+    curl -i -X PUT "http://127.0.0.1:5000/api/v1/places/91ba90de-ab00-44b9-8159-2293aced8c6d" -H "Content-Type: application/json" -d '{
+      "price": -50
+    }'
+
+Status: HTTP/1.1 400 BAD REQUEST
 
 Response:
 
@@ -171,90 +209,10 @@ Result: PASS
 
 ---
 
-## 5. Create Place -- Invalid Latitude (Out of Range)
+## Summary
 
-### cURL Command
+All Place endpoints were tested for: - Creation validation - Boundary
+validation - Retrieval (all and specific) - Proper 404 handling - Update
+validation - Correct HTTP status semantics
 
-    curl -i -X POST "http://127.0.0.1:5000/api/v1/places/" -H "Content-Type: application/json" -d '{
-      "title": "Bad Latitude",
-      "price": 100,
-      "latitude": 100,
-      "longitude": 20,
-      "owner_id": "fd0aa49d-2b75-45cd-9066-89a8c7a07209"
-    }'
-
-### Actual Result
-
-Status:
-
-    HTTP/1.1 400 BAD REQUEST
-
-Response:
-
-```json
-{
-  "error": "Latitude must be between -90.0 and 90.0"
-}
-```
-
-Result: PASS
-
----
-
-## 6. Create Place -- Invalid Longitude (Out of Range)
-
-### cURL Command
-
-    curl -i -X POST "http://127.0.0.1:5000/api/v1/places/" -H "Content-Type: application/json" -d '{
-      "title": "Bad Longitude",
-      "price": 100,
-      "latitude": 10,
-      "longitude": 200,
-      "owner_id": "fd0aa49d-2b75-45cd-9066-89a8c7a07209"
-    }'
-
-### Actual Result
-
-Status:
-
-    HTTP/1.1 400 BAD REQUEST
-
-Response:
-
-```json
-{
-  "error": "Longitude must be between -180.0 and 180.0"
-}
-```
-
-Result: PASS
-
----
-
-## 7. Create Place -- Invalid Owner
-
-### cURL Command
-
-    curl -i -X POST "http://127.0.0.1:5000/api/v1/places/" -H "Content-Type: application/json" -d '{
-      "title": "Invalid Owner",
-      "price": 100,
-      "latitude": 10,
-      "longitude": 20,
-      "owner_id": "nonexistent-id"
-    }'
-
-### Actual Result
-
-Status:
-
-    HTTP/1.1 400 BAD REQUEST
-
-Response:
-
-```json
-{
-  "error": "Owner not found"
-}
-```
-
-Result: PASS
+All identified defects were resolved and verified through retesting.
