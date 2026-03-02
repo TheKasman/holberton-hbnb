@@ -57,6 +57,25 @@ class Place(BaseModel):
         self.reviews = []
         self.amenities = []
 
+    def update(self, data):
+        if "title" in data:
+            if not data["title"] or len(data["title"]) > 100:
+                raise ValueError("Place title must be a non-empty string up to 100 characters")
+
+        if "price" in data:
+            if data["price"] <= 0:
+                raise ValueError("Price must be a positive value")
+
+        if "latitude" in data:
+            if not (-90.0 <= data["latitude"] <= 90.0):
+                raise ValueError("Latitude must be between -90.0 and 90.0")
+
+        if "longitude" in data:
+            if not (-180.0 <= data["longitude"] <= 180.0):
+                raise ValueError("Longitude must be between -180.0 and 180.0")
+
+        super().update(data)
+        
     # ==========================================================
     # Relationship Methods
     # ==========================================================

@@ -147,10 +147,8 @@ class PlaceResource(Resource):
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     def put(self, place_id):
-        """Update a place"""
         try:
             place = facade.update_place(place_id, request.json)
-
             return {
                 "id": place.id,
                 "title": place.title,
@@ -162,4 +160,6 @@ class PlaceResource(Resource):
             }, 200
 
         except ValueError as e:
-            return {"error": str(e)}, 404
+            if str(e) == "Place not found":
+                return {"error": str(e)}, 404
+            return {"error": str(e)}, 400
