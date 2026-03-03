@@ -24,9 +24,11 @@ place_model = api.model('Place', {
     'latitude': fields.Float(required=True, description='Latitude (-90 to 90)'),
     'longitude': fields.Float(required=True, description='Longitude (-180 to 180)'),
     'owner_id': fields.String(required=True, description='ID of the owner'),
-    'owner': fields.Nested(user_model, description='Owner of the place'),
-    'amenities': fields.List(fields.Nested(amenity_model), description='List of amenities'),
-    'reviews': fields.List(fields.Nested(review_model), description='List of reviews')
+    'amenity_ids': fields.List(
+        fields.String,
+        required=False,
+        description='List of amenity IDs'
+    )
 })
 
 
@@ -145,10 +147,8 @@ class PlaceResource(Resource):
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     def put(self, place_id):
-        """Update a place"""
         try:
             place = facade.update_place(place_id, request.json)
-
             return {
                 "id": place.id,
                 "title": place.title,
@@ -160,4 +160,6 @@ class PlaceResource(Resource):
             }, 200
 
         except ValueError as e:
-            return {"error": str(e)}, 404
+            if str(e) == "Place not found":
+                return {"error": str(e)}, 404
+            return {"error": str(e)}, 400

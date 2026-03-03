@@ -4,8 +4,13 @@ This repository contains the deliverables for Part 1 of the HBnB project.
 The focus of this stage is on system design, including architecture planning, class modelling, and behavioural analysis through sequence diagrams.
 
 ## Setup
+1. Clone the repository
+```bash
+git clone https://github.com/TheKasman/holberton-hbnb.git
+cd holberton-hbnb/part2
+```
 
-1. Install the required packages:
+2. Install the required packages:
 ```bash
 pip install -r requirements.txt
 ```
@@ -17,10 +22,10 @@ flask
 flask-restx
 ```
 
-2. Run the application:
+3. Run the application:
 
 ```bash
-python run.py
+python3 run.py
 ```
 ---
 
