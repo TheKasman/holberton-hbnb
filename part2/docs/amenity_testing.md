@@ -84,12 +84,6 @@ curl http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475
 **Status Code:** 200
 **Result:** PASS
 
-> **Note:** The original test used a different ID
-> (fadb59b0-2a97-4f8e-92aa-9507bb8c5c45) from a previous session.
-> Since the app uses in-memory storage, data does not persist between
-> restarts. The correct ID from this session is
-> 539e211c-9eab-4df9-ad2d-7b59d6ce3475.
-
 ---
 
 ## Test 4 - Update an Amenity (PUT /api/v1/amenities/<id>)
@@ -117,11 +111,6 @@ curl -X PUT http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d
 
 **Status Code:** 200
 **Result:** PASS
-
-> **Note:** An earlier attempt failed with a space in the URL
-> (amenities/ <id>) and an AttributeError caused by a double-call bug
-> in the facade - update() was being called both manually and via the
-> repository. Both issues were resolved before this test passed.
 
 ---
 
