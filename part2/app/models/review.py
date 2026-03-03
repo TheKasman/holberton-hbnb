@@ -3,9 +3,9 @@ from app.models.base_model import BaseModel
 
 # defines a Review class to represent a review object
 class Review(BaseModel):
-    def __init__ (self, id, text, rating, place_id, user_id, created_at, updated_at):
+    def __init__ (self, text, rating, place_id, user_id):
         """Initialize a Review instance."""
-        super().__init__(id, created_at, updated_at)
+        super().__init__()
         self.text = text
         self.rating = rating
         self.place_id = place_id
@@ -24,6 +24,8 @@ class Review(BaseModel):
             raise ValueError("User ID must be provided.")
         if not place_id:
             raise ValueError("Place ID must be provided.")
+
+# =====================================================================================
 
     # defines one to many relationship with Place and User
     def set_place(self, place_id):
