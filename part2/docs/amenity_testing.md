@@ -7,14 +7,26 @@ a locally running Flask development server at http://127.0.0.1:5000.
 
 ---
 
+## How to Reproduce Tests
+
+1.  Start the Flask server:
+
+```
+    python3 run.py
+```
+
+2.  Run the cURL commands below exactly as written.
+
+---
+
 ## Test 1 - Create an Amenity (POST /api/v1/amenities/)
 
 **Command:**
-```bash
+`
 curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
   -H "Content-Type: application/json" \
   -d '{"name": "Wi-Fi"}'
-```
+`
 
 **Input:**
 ```json
@@ -39,9 +51,9 @@ curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
 ## Test 2 - Retrieve All Amenities (GET /api/v1/amenities/)
 
 **Command:**
-```bash
+`
 curl http://127.0.0.1:5000/api/v1/amenities/
-```
+`
 
 **Input:** None
 
@@ -65,9 +77,9 @@ curl http://127.0.0.1:5000/api/v1/amenities/
 ## Test 3 - Retrieve a Single Amenity by ID (GET /api/v1/amenities/<id>)
 
 **Command:**
-```bash
+`
 curl http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475
-```
+`
 
 **Input:** Valid amenity ID from Test 1
 
@@ -81,7 +93,8 @@ curl http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475
 }
 ```
 
-**Status Code:** 200
+**Status Code:** HTTP 1.1/ 200 OK
+
 **Result:** PASS
 
 ---
@@ -89,11 +102,11 @@ curl http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475
 ## Test 4 - Update an Amenity (PUT /api/v1/amenities/<id>)
 
 **Command:**
-```bash
+`
 curl -X PUT http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475 \
   -H "Content-Type: application/json" \
   -d '{"name": "Free Wi-Fi"}'
-```
+`
 
 **Input:**
 ```json
@@ -109,7 +122,8 @@ curl -X PUT http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d
 }
 ```
 
-**Status Code:** 200
+**Status Code:** HTTP 1.1/ 200 OK
+
 **Result:** PASS
 
 ---
@@ -117,11 +131,11 @@ curl -X PUT http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d
 ## Test 5 - Create Amenity with Invalid Input (POST /api/v1/amenities/)
 
 **Command:**
-```bash
+`
 curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
   -H "Content-Type: application/json" \
   -d '{"name": ""}'
-```
+`
 
 **Input:**
 ```json
@@ -137,7 +151,8 @@ curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
 }
 ```
 
-**Status Code:** 400
+**Status Code:** HTTP/1.1 400 BAD REQUEST
+
 **Result:** PASS
 
 ---

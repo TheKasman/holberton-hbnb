@@ -1,5 +1,12 @@
 # Place Endpoint Testing Report
 
+## Overview
+This document logs the manual black-box testing performed on the Place
+endpoint of the HBnB REST API. Tests were carried out using cURL against
+a locally running Flask development server at http://127.0.0.1:5000.
+
+---
+
 ## Environment
 
 - Flask app running locally via Docker
@@ -26,7 +33,7 @@
 
 ### Endpoint
 
-POST /api/v1/users/
+`POST /api/v1/users/`
 
 ### cURL Command
 
@@ -38,9 +45,9 @@ POST /api/v1/users/
 
 ### Actual Result
 
-Status: HTTP/1.1 201 CREATED
+**Status:** HTTP/1.1 201 CREATED
 
-Response:
+**Response:**
 
 ```json
 {
@@ -51,7 +58,7 @@ Response:
 }
 ```
 
-Result: PASS
+**Result:** PASS
 
 ---
 
@@ -59,7 +66,7 @@ Result: PASS
 
 ### Endpoint
 
-POST /api/v1/places/
+`POST /api/v1/places/`
 
 ### cURL Command
 
@@ -74,9 +81,9 @@ POST /api/v1/places/
 
 ### Actual Result
 
-Status: HTTP/1.1 201 CREATED
+**Status:** HTTP/1.1 201 CREATED
 
-Response:
+**Response:**
 
 ```json
 {
@@ -90,7 +97,7 @@ Response:
 }
 ```
 
-Result: PASS
+**Result:** PASS
 
 ---
 
@@ -98,13 +105,13 @@ Result: PASS
 
 ### Endpoint
 
-GET /api/v1/places/
+`GET /api/v1/places/`
 
 ### cURL Command
 
     curl -i -X GET "http://127.0.0.1:5000/api/v1/places/"
 
-Result: PASS
+**Result:** PASS
 
 ---
 
@@ -114,7 +121,7 @@ Result: PASS
 
     curl -i -X GET "http://127.0.0.1:5000/api/v1/places/91ba90de-ab00-44b9-8159-2293aced8c6d"
 
-Result: PASS
+**Result:** PASS
 
 ---
 
@@ -124,9 +131,9 @@ Result: PASS
 
     curl -i -X GET "http://127.0.0.1:5000/api/v1/places/nonexistent-id"
 
-Status: HTTP/1.1 404 NOT FOUND
+**Status:** HTTP/1.1 404 NOT FOUND
 
-Response:
+**Response:**
 
 ```json
 {
@@ -134,7 +141,7 @@ Response:
 }
 ```
 
-Result: PASS
+**Result:** PASS
 
 ---
 
@@ -148,7 +155,7 @@ Result: PASS
 
 Status: HTTP/1.1 200 OK
 
-Result: PASS
+**Result:** PASS
 
 ---
 
@@ -205,7 +212,7 @@ Response:
 }
 ```
 
-Result: PASS
+**Result:** PASS
 
 ---
 
