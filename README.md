@@ -29,6 +29,19 @@ python3 run.py
 ```
 ---
 
+## Testing
+
+Install pytest:
+```bash
+pip3 install pytest
+```
+
+Run the tests:
+```bash
+pytest
+```
+---
+
 ## 📁 Repository Contents
 
 ### /Part1/class_diagrams/
