@@ -31,12 +31,12 @@ python3 run.py
 
 ## Testing
 
-Install pytest:
+1. Install pytest:
 ```bash
 pip3 install pytest
 ```
 
-Run the tests:
+2. Run the tests:
 ```bash
 pytest
 ```
