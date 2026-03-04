@@ -16,7 +16,7 @@ cd holberton-hbnb/part2
 
 2. Install the required packages:
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 The `requirements.txt` file contains:
