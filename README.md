@@ -29,7 +29,7 @@ This document acts as the blueprint for the HBnB system and demonstrates our und
 
 ### Part 2 - RESTful API
 
-#### Setup
+#### ⚙️ Setup
 
 1. Clone the repository
 ```bash
@@ -57,7 +57,7 @@ python3 run.py
 
 The API will be available at `http://127.0.0.1:5000`.
 
-#### API Endpoints
+#### 🔀 API Endpoints
 
 Flask-RESTx auto-generates Swagger documentation. Once the app is running, visit `http://127.0.0.1:5000/api/v1/` to explore all endpoints interactively.
 
@@ -99,7 +99,7 @@ Flask-RESTx auto-generates Swagger documentation. Once the app is running, visit
 | PUT | `/api/v1/reviews/<review_id>` | Update a review |
 | DELETE | `/api/v1/reviews/<review_id>` | Delete a review |
 
-#### Business Logic Layer
+#### 🧠 Business Logic Layer
 
 The Business Logic layer lives in `app/models/` and defines the core entities of the application. All entities inherit from `BaseModel`, which provides shared attributes and behaviour:
 - A unique UUID identifier generated at creation
@@ -222,7 +222,7 @@ Place >──< Amenity    (many-to-many via a list on Place)
 
 All cross-entity references are validated to ensure related objects exist before being linked.
 
-#### Testing
+#### 🧪 Testing
 
 1. Install pytest:
 
@@ -239,32 +239,76 @@ pytest
 
 **Manual testing with cURL**
 
-Create a user:
+The examples below are drawn from our black-box testing reports. Start the server with `python3 run.py` before running any command.
+
+*Users*
+
+Create a user — expected `201 Created`:
 ```bash
-curl -X POST "http://127.0.0.1:5000/api/v1/users/" \
+curl -i -X POST "http://127.0.0.1:5000/api/v1/users/" \
   -H "Content-Type: application/json" \
   -d '{"first_name": "John", "last_name": "Doe", "email": "john.doe@example.com"}'
 ```
+```json
+{
+  "id": "322b1710-0c3d-409a-9e68-22e5fe5013ec",
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com"
+}
+```
 
-Create an amenity:
+*Amenities*
+
+Create an amenity — expected `201 Created`:
 ```bash
-curl -X POST "http://127.0.0.1:5000/api/v1/amenities/" \
+curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
   -H "Content-Type: application/json" \
   -d '{"name": "Wi-Fi"}'
 ```
-
-Create a place:
-```bash
-curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Cozy Apartment", "description": "A nice place to stay", "price": 100.0, "latitude": 37.7749, "longitude": -122.4194, "owner_id": ""}'
+```json
+{
+  "id": "539e211c-9eab-4df9-ad2d-7b59d6ce3475",
+  "name": "Wi-Fi"
+}
 ```
 
-Create a review:
+*Places*
+
+Create a place — expected `201 Created` (requires a valid `owner_id` from a created user):
 ```bash
-curl -X POST "http://127.0.0.1:5000/api/v1/reviews/" \
+curl -i -X POST "http://127.0.0.1:5000/api/v1/places/" \
   -H "Content-Type: application/json" \
-  -d '{"text": "Great stay!", "rating": 5, "user_id": "", "place_id": ""}'
+  -d '{"title": "Beach House", "description": "Nice place", "price": 100, "latitude": 10, "longitude": 20, "owner_id": "fd0aa49d-2b75-45cd-9066-89a8c7a07209"}'
+```
+```json
+{
+  "id": "91ba90de-ab00-44b9-8159-2293aced8c6d",
+  "title": "Beach House",
+  "description": "Nice place",
+  "price": 100,
+  "latitude": 10,
+  "longitude": 20,
+  "owner_id": "fd0aa49d-2b75-45cd-9066-89a8c7a07209"
+}
+```
+
+*Reviews*
+
+Create a review — expected `201 Created`:
+```bash
+curl -i -X POST "http://127.0.0.1:5000/api/v1/reviews/" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Amazing experience!", "rating": 5, "user_id": "user123", "place_id": "place456"}'
+```
+```json
+{
+  "id": "9f4c6c88-9b61-4c73-a4b2-3f8eaf1e6a1b",
+  "text": "Amazing experience!",
+  "rating": 5,
+  "user_id": "user123",
+  "place_id": "place456"
+}
 ```
 
 ---
