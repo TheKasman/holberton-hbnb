@@ -13,7 +13,6 @@ a locally running Flask development server at http://127.0.0.1:5000.
 * Base URL: http://127.0.0.1:5000
 * API Prefix: /api/v1
 * Testing tool: cURL
-* Swagger UI verified and accessible
 
 ---
 

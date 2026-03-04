@@ -9,11 +9,10 @@ a locally running Flask development server at http://127.0.0.1:5000.
 
 ## Environment
 
-- Flask app running locally via Docker
-- Base URL: http://127.0.0.1:5000
-- API Prefix: /api/v1
-- Testing tool: cURL
-- Swagger UI verified and accessible
+* Flask app running locally via Terminal
+* Base URL: http://127.0.0.1:5000
+* API Prefix: /api/v1
+* Testing tool: cURL
 
 ---
 
