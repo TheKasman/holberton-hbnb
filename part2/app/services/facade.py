@@ -18,9 +18,26 @@ class HBnBFacade:
     
     #  Method for creating a user
     def create_user(self, user_data):
+        # Required fields
+        required = ["first_name", "last_name", "email"]
+        for field in required:
+            if field not in user_data:
+                raise ValueError(f"Missing required field: {field}")
+
+        # Basic email format check
+        email = user_data["email"]
+        if "@" not in email or "." not in email:
+            raise ValueError("Invalid email format")
+
+        # Duplicate email check
+        if self.get_user_by_email(email):
+            raise ValueError("Email already exists")
+
+        # Create and store user
         user = User(**user_data)
         self.user_repo.add(user)
         return user
+
 
 
     #  Gets the user
@@ -151,7 +168,7 @@ class HBnBFacade:
                 raise ValueError("Rating must be between 1 and 5")
             review.rating = review_data['rating']
         
-        self.review_repo.update(review_id, review)
+        self.review_repo.add(review)
         return review
 
     def delete_review(self, review_id):
@@ -163,6 +180,8 @@ class HBnBFacade:
         self.review_repo.delete(review_id)
         return True
 
+    def get_review_by_id(self, review_id):
+        return self.get_review(review_id)
 
     # ==========================================================================
     # AMENITY METHODS

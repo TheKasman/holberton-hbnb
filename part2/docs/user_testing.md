@@ -33,11 +33,10 @@ a locally running Flask development server at http://127.0.0.1:5000.
 `POST /api/v1/users/`
 
 ### cURL Command
-`curl -i -X POST "http://127.0.0.1:5000/api/v1/users/" \  -H "Content-Type: application/json" \  -d '{
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john.doe@example.com" }'`
-
+`curl -i -X POST "http://127.0.0.1:5000/api/v1/users/" \
+  -H "Content-Type: application/json" \
+  -d '{ "first_name": "John", "last_name": "Doe", "email": "john.doe@example.com" }'
+`
 ### Actual Result
 **Status:** HTTP/1.1 201 CREATED
 
