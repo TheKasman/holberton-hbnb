@@ -210,5 +210,12 @@ class HBnBFacade:
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
             return None
+
+        # Re-run validation before updating
+        # Return an empty string if the key 'name' isn't there 
+        name = amenity_data.get('name', '')
+        if not name or not isinstance(name, str) or len(name) > 50:
+            raise ValueError("Amenity name must be a non-empty string of max 50 characters")
+
         self.amenity_repo.update(amenity_id, amenity_data)
         return amenity
