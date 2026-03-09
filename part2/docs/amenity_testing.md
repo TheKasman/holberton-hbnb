@@ -47,8 +47,10 @@ curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
 **Actual:**
 ```json
 {
-	"id": "539e211c-9eab-4df9-ad2d-7b59d6ce3475",
-	"name": "Wi-Fi"
+	"id": "a0ed107c-be43-4375-a4ae-0c07cb1f5ab6",
+  "name": "Wi-Fi",
+  "created_at": "2026-03-09T03:19:27.428888",
+  "updated_at": "2026-03-09T03:19:27.428893"
 }
 ```
 
@@ -72,8 +74,10 @@ curl http://127.0.0.1:5000/api/v1/amenities/
 ```json
 [
     {
-        "id": "539e211c-9eab-4df9-ad2d-7b59d6ce3475",
-        "name": "Wi-Fi"
+        "id": "a0ed107c-be43-4375-a4ae-0c07cb1f5ab6",
+        "name": "Wi-Fi",
+        "created_at": "2026-03-09T03:19:27.428888",
+        "updated_at": "2026-03-09T03:19:27.428893"
     }
 ]
 ```
@@ -87,7 +91,7 @@ curl http://127.0.0.1:5000/api/v1/amenities/
 
 **Command:**
 `
-curl http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475
+curl http://127.0.0.1:5000/api/v1/amenities/a0ed107c-be43-4375-a4ae-0c07cb1f5ab6
 `
 
 **Input:** Valid amenity ID from Test 1
@@ -97,8 +101,10 @@ curl http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475
 **Actual:**
 ```json
 {
-    "id": "539e211c-9eab-4df9-ad2d-7b59d6ce3475",
-    "name": "Wi-Fi"
+  "id": "a0ed107c-be43-4375-a4ae-0c07cb1f5ab6",
+  "name": "Wi-Fi",
+  "created_at": "2026-03-09T03:19:27.428888",
+  "updated_at": "2026-03-09T03:19:27.428893"
 }
 ```
 
@@ -112,7 +118,7 @@ curl http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475
 
 **Command:**
 `
-curl -X PUT http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d6ce3475 \
+curl -X PUT http://127.0.0.1:5000/api/v1/amenities/a0ed107c-be43-4375-a4ae-0c07cb1f5ab6 \
   -H "Content-Type: application/json" \
   -d '{"name": "Free Wi-Fi"}'
 `
@@ -127,7 +133,10 @@ curl -X PUT http://127.0.0.1:5000/api/v1/amenities/539e211c-9eab-4df9-ad2d-7b59d
 **Actual:**
 ```json
 {
-    "message": "Amenity updated successfully"
+  "id": "a0ed107c-be43-4375-a4ae-0c07cb1f5ab6",
+  "name": "Free Wi-Fi",
+  "created_at": "2026-03-09T03:19:27.428888",
+  "updated_at": "2026-03-09T03:19:27.428893"
 }
 ```
 
@@ -156,7 +165,7 @@ curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
 **Actual:**
 ```json
 {
-    "error": "Amenity name must be a non-empty string of max 50 characters"
+  "error": "Amenity name must be a non-empty string of max 50 characters"
 }
 ```
 
@@ -166,4 +175,33 @@ curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
 
 ---
 
-**All 5 tests passed.**
+## Test 6 - Update Amenity with Invalid Input (PUT /api/v1/amenities/<id>)
+
+**Command:**
+`
+curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \a0ed107c-be43-4375-a4ae-0c07cb1f5ab6 \
+  -H "Content-Type: application/json" \
+  -d '{"name": ""}'
+`
+
+**Input:**
+```json
+{ "name": "" }
+```
+
+**Expected:** 400 Bad Request - empty name should be rejected by validation
+
+**Actual:**
+```json
+{
+  "error": "Amenity name must be a non-empty string of max 50 characters"
+}
+```
+
+**Status Code:** HTTP/1.1 400 BAD REQUEST
+
+**Result:** PASS
+
+---
+
+**All 6 tests passed.**

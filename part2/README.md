@@ -245,8 +245,10 @@ curl -X POST http://127.0.0.1:5000/api/v1/amenities/ \
 ```
 ```json
 {
-  "id": "539e211c-9eab-4df9-ad2d-7b59d6ce3475",
-  "name": "Wi-Fi"
+  "id": "a0ed107c-be43-4375-a4ae-0c07cb1f5ab6",
+  "name": "Wi-Fi",
+  "created_at": "2026-03-09T03:19:27.428888",
+  "updated_at": "2026-03-09T03:19:27.428893"
 }
 ```
 
