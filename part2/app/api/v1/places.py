@@ -87,6 +87,7 @@ class PlaceList(Resource):
 # Additional routes for place details and reviews
 # ============================================================
 
+
 @api.route('/<place_id>/reviews')
 class PlaceReviewList(Resource):
     @api.response(200, 'List of reviews for the place retrieved successfully')
@@ -98,17 +99,12 @@ class PlaceReviewList(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-        return [{
-            "id": review.id,
-            "rating": review.rating,
-            "comment": review.comment,
-            "reviewer": {
-                "id": review.reviewer.id,
-                "first_name": review.reviewer.first_name,
-                "last_name": review.reviewer.last_name,
-                "email": review.reviewer.email
-            }
-        } for review in place.reviews], 200
+        reviews = facade.get_reviews_by_place(place_id)
+
+        if not reviews:
+            return {"error": "No reviews found for this place"}, 404
+
+        return [review.to_dict() for review in reviews], 200
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):

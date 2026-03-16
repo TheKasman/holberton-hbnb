@@ -14,6 +14,7 @@ review_model = api.model('Review', {
 
 @api.route('/')
 class ReviewList(Resource):
+    """Core functionality for review lists."""
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
@@ -25,25 +26,25 @@ class ReviewList(Resource):
         if not 1 <= data.get('rating', 0) <= 5:
             api.abort(400, 'Rating must be between 1 and 5')
 
-        # returns created review with status code 201 or 
+        # returns created review with status code 201 or
         # an error message with status code 400 if the input data is invalid
         try:
             review = facade.create_review(data)
-            return review, 201
+            return review.to_dict(), 201
         except ValueError as e:
             api.abort(400, str(e))
 
-    
+
     @api.response(200, 'List of reviews retrieved successfully')
     def get(self):
         """Retrieve a list of all reviews"""
         reviews = facade.get_all_reviews()
 
         if not reviews:
-            api.abort(404, 'No reviews found') 
+            api.abort(404, 'No reviews found')
 
-        return reviews, 200  
-        
+        return [review.to_dict() for review in reviews], 200
+
 
 @api.route('/<review_id>')
 class ReviewResource(Resource):
@@ -56,7 +57,7 @@ class ReviewResource(Resource):
         if not review:
             api.abort(404, 'Review not found')
 
-        return review, 200
+        return review.to_dict(), 200
 
     @api.expect(review_model)
     @api.response(200, 'Review updated successfully')
@@ -72,8 +73,8 @@ class ReviewResource(Resource):
 
         try:
             updated_review = facade.update_review(review_id, data)
-            return updated_review, 200
-        
+            return updated_review.to_dict(), 200
+
         except ValueError as e:
             api.abort(400, str(e))
         except KeyError:
@@ -87,5 +88,5 @@ class ReviewResource(Resource):
 
         if not deleted:
             api.abort(404, 'Review not found')
-        
-        api.abort(200, 'Review deleted successfully')
+
+        return {"message": "Review deleted successfully"}, 200
