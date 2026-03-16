@@ -33,21 +33,24 @@ a locally running Flask development server at http://127.0.0.1:5000.
 `POST /api/v1/users/`
 
 ### cURL Command
-`curl -i -X POST "http://127.0.0.1:5000/api/v1/users/" \
+`curl -X POST http://localhost:5000/api/v1/users/ \
   -H "Content-Type: application/json" \
-  -d '{ "first_name": "John", "last_name": "Doe", "email": "john.doe@example.com" }'
-`
+  -d '{
+        "first_name": "Alice",
+        "last_name": "Smith",
+        "email": "alice@example.com",
+        "password": "mypassword123"
+      }'`
+
 ### Actual Result
-**Status:** HTTP/1.1 201 CREATED
-
-**Response:**
-
+Status: HTTP/1.1 201 CREATED
 ```
+Response:
 {
-    "id": "322b1710-0c3d-409a-9e68-22e5fe5013ec",
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john.doe@example.com"
+    "id": "f2425619-76bc-4ba0-80dd-3799fdfd8f0d",
+    "first_name": "Alice",
+    "last_name": "Smith",
+    "email": "alice@example.com"
 }
 ```
 ---
@@ -89,16 +92,14 @@ a locally running Flask development server at http://127.0.0.1:5000.
 `curl -i -X GET "http://127.0.0.1:5000/api/v1/users/<id>"`
 
 ### Actual Result
-**Status:** HTTP/1.1 200 OK
-
-**Response:**
-
+Status: HTTP/1.1 200 OK
 ```
+Response:
 {
-    "id": "322b1710-0c3d-409a-9e68-22e5fe5013ec",
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john.doe@example.com"
+    "id": "f2425619-76bc-4ba0-80dd-3799fdfd8f0d",
+    "first_name": "Alice",
+    "last_name": "Smith",
+    "email": "alice@example.com"
 }
 ```
 ---
