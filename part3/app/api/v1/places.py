@@ -1,5 +1,6 @@
 from flask import request
 from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from .users import user_model
 from .amenities import amenity_model
 from app.services import facade
@@ -23,7 +24,6 @@ place_model = api.model('Place', {
     'price': fields.Float(required=True, description='Price per night'),
     'latitude': fields.Float(required=True, description='Latitude (-90 to 90)'),
     'longitude': fields.Float(required=True, description='Longitude (-180 to 180)'),
-    'owner_id': fields.String(required=True, description='ID of the owner'),
     'amenity_ids': fields.List(
         fields.String,
         required=False,
@@ -47,11 +47,19 @@ update_place_model = api.model('UpdatePlace', {
 @api.route('/')
 class PlaceList(Resource):
 
+    @jwt_required()
     @api.expect(place_model, validate=True)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
+    @api.response(401, 'Authentication required')
     def post(self):
-        """Create a new place"""
+        """Create a new place (authenticated users only)"""
+        current_user_id = get_jwt_identity()
+        data = request.json.copy()
+
+        # Force owner_id to be the authenticated user — ignore any client-supplied value
+        data['owner_id'] = current_user_id
+
         try:
             place = facade.create_place(request.json)
 
@@ -139,10 +147,22 @@ class PlaceResource(Resource):
             ]
         }, 200
 
+    @jwt_required()
     @api.expect(update_place_model, validate=True)
     @api.response(200, 'Place updated successfully')
+    @api.response(403, 'Unauthorized action')
     @api.response(404, 'Place not found')
     def put(self, place_id):
+        """Update a place (owner only)"""
+        current_user_id = get_jwt_identity()
+        place = facade.get_place(place_id)
+
+        if not place:
+            return {"error": "Place not found"}, 404
+
+        if place.owner.id != current_user_id:
+            return {"error": "Unauthorized action"}, 403
+
         try:
             place = facade.update_place(place_id, request.json)
             return {
@@ -156,6 +176,4 @@ class PlaceResource(Resource):
             }, 200
 
         except ValueError as e:
-            if str(e) == "Place not found":
-                return {"error": str(e)}, 404
             return {"error": str(e)}, 400
