@@ -1,6 +1,7 @@
 """Users endpoint module"""
 
 from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services import facade
 
 api = Namespace('users', description='User operations')
@@ -11,6 +12,11 @@ user_model = api.model('User', {
     'last_name': fields.String(required=True, description='Last name of the user'),
     'email': fields.String(required=True, description='Email of the user'),
     'password': fields.String(required=True, description="Password of the user")
+})
+
+update_user_model = api.model('UpdateUser', {
+    'first_name': fields.String(required=False, description='First name of the user'),
+    'last_name': fields.String(required=False, description='Last name of the user'),
 })
 
 @api.route('/')
@@ -69,11 +75,20 @@ class UserResource(Resource):
                 'email': user.email
             }, 200
 
-    @api.expect(user_model, validate=True)
+    @jwt_required()
+    @api.expect(update_user_model, validate=True)
     @api.response(200, 'User successfully updated')
+    @api.response(400, 'Cannot modify email or password')
+    @api.response(403, 'Unauthorized action')
     @api.response(404, 'User not found')
     def put(self, user_id):
-        """Update user details"""
+        """Update user details (own account only, no email/password changes)"""
+        current_user_id = get_jwt_identity()
+
+        # Users can only modify their own data
+        if current_user_id != user_id:
+            return {'error': 'Unauthorized action'}, 403
+        
         user = facade.get_user(user_id)
 
         if not user:
@@ -81,10 +96,13 @@ class UserResource(Resource):
 
         data = api.payload
 
+        # Block email or password modification on this endpoint
+        if 'email' in data or 'password' in data:
+            return {'error': 'You cannot modify email or password'}, 400
+
         # Update fields
-        user.first_name = data['first_name']
-        user.last_name = data['last_name']
-        user.email = data['email']
+        user.first_name = data.get('first_name', user.first_name)
+        user.last_name = data.get('last_name', user.last_name)
 
         return {
             'id': user.id,
