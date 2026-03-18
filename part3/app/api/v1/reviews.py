@@ -29,7 +29,7 @@ class ReviewList(Resource):
     def post(self):
         """Create a new review (authenticated users only)"""
         current_user_id = get_jwt_identity()
-        data = request.json.copy()
+        data = dict(api.payload)
 
         # checks if the rating is between 1 and 5
         if not 1 <= data.get('rating', 0) <= 5:
