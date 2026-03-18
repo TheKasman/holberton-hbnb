@@ -36,7 +36,7 @@ class ReviewList(Resource):
             return {'error': 'Rating must be between 1 and 5'}, 400
         
         # Look up the place
-        place = facade.get_place('rating', 0) <= 5:
+        place = facade.get_place(data.get('place_id'))
         if not place:
             return {'error': 'Place not found'}. 404
 
