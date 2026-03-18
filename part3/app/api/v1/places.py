@@ -55,13 +55,13 @@ class PlaceList(Resource):
     def post(self):
         """Create a new place (authenticated users only)"""
         current_user_id = get_jwt_identity()
-        data = request.json.copy()
+        data = dict(api.payload)
 
         # Force owner_id to be the authenticated user — ignore any client-supplied value
         data['owner_id'] = current_user_id
 
         try:
-            place = facade.create_place(request.json)
+            place = facade.create_place(data)
 
             return {
                 "id": place.id,
