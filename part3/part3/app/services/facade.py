@@ -1,9 +1,14 @@
 from app.persistence.repository import InMemoryRepository
 import uuid
+
+# App Model Imports
 from app.models.user import User
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.review import Review
+
+# SQLAlchemy Instance import (when we get to it)
+from app import db
 
 class HBnBFacade:
     def __init__(self):
@@ -193,3 +198,24 @@ class HBnBFacade:
             return None
         self.amenity_repo.update(amenity_id, amenity_data)
         return amenity
+    
+
+# --------------------------------------------------------------------------------------------------------
+
+
+# Function for updating user information so that it is saved within the database (persists)
+def update_user(user: User) -> User:
+    try:
+        # adds new user, commits the changes to persist updates and refreshes to retrieve updated state
+        db.session.add(user)
+        db.session.commit()
+        db.session.refresh(user)
+        return user
+    except Exception as e:
+        # rolls back if an error occurs
+        db.session.rollback()
+        raise e
+    
+# Function for filtering amenities by name (helpful for admin if amenity already exists)
+def get_amenity_by_name(name: str) -> Amenity | None: # amenity object if found, otherwise none
+    return db.session.query(Amenity).filter(Amenity.name == name).first()

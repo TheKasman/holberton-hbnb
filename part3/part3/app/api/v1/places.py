@@ -1,5 +1,6 @@
 from flask import request
 from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import jwt_required, get_jwt
 from .users import user_model
 from .amenities import amenity_model
 from app.services import facade
@@ -163,3 +164,58 @@ class PlaceResource(Resource):
             if str(e) == "Place not found":
                 return {"error": str(e)}, 404
             return {"error": str(e)}, 400
+        
+
+# -----------------------------------------Admin-----------------------------------------
+
+# allows admins or owners to modify a place
+@api.route('/places/<place_id>')
+class AdminPlaceModify(Resource):
+    @jwt_required()
+    @api.expect(place_model, validate=True)
+    @api.response(200, 'Place successfully updated')
+    @api.response(403, 'Unauthorized action')
+    @api.response(404, 'Place not found')
+    def put(self, place_id):
+        current_user = get_jwt()
+
+        # Set is_admin default to False if not exists
+        is_admin = current_user.get('is_admin', False)
+        user_id = current_user.get('id')
+
+        # retrieves place
+        place = facade.get_place(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
+        
+        # if not admin or place owner, PUBLICLY SHAME THEM BOOOOOOOOOOOOOO
+        if not is_admin and place.owner_id != user_id:
+            return {'error': 'Unauthorized action'}, 403
+        
+        # input data for modification
+        data = request.json
+        name = data.get('name')
+        description = data.get('description')
+        city_id = data.get('city_id')
+
+        # checks if you put in all required fields
+        if not name or not description:
+            return {'error': 'Missing required fields: name or description'}, 400
+        
+        # newly updated place info
+        place.name = name
+        place.description = description
+        if city_id:
+            place.city_id = city_id
+
+        # persist changes
+        facade.update_place(place)
+
+        # return newly updated place
+        return {
+            'id': place.id,
+            'name': place.name,
+            'description': place.description,
+            'city_id': place.city_id,
+            'owner_id': place.owner_id
+        }, 200
