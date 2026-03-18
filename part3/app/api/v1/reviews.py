@@ -49,7 +49,7 @@ class ReviewList(Resource):
         if existing_reviews:
             for review in existing_reviews:
                 if review.user_id == current_user_id:
-                return {'error': 'You have already reviewed this place'}, 400
+                    return {'error': 'You have already reviewed this place'}, 400
         
         #Set user_id from the token - ignore any client-supplied value
         data['user_id'] = current_user_id

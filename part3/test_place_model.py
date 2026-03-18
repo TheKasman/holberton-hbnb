@@ -8,7 +8,7 @@ import pytest
 # ==========================================================
 
 def test_place_valid_creation():
-    owner = User("John", "Doe", "john@example.com")
+    owner = User("John", "Doe", "john@example.com", "securepassword123")
 
     place = Place(
         title="Beach House",
@@ -28,7 +28,7 @@ def test_place_valid_creation():
 # ==========================================================
 
 def test_place_invalid_title_empty():
-    owner = User("John", "Doe", "john@example.com")
+    owner = User("John", "Doe", "john@example.com", "securepassword123")
 
     with pytest.raises(ValueError):
         Place(
@@ -45,7 +45,7 @@ def test_place_invalid_title_empty():
 # ==========================================================
 
 def test_place_invalid_price_zero():
-    owner = User("John", "Doe", "john@example.com")
+    owner = User("John", "Doe", "john@example.com", "securepassword123")
 
     with pytest.raises(ValueError):
         Place(
@@ -58,7 +58,7 @@ def test_place_invalid_price_zero():
 
 
 def test_place_invalid_price_negative():
-    owner = User("John", "Doe", "john@example.com")
+    owner = User("John", "Doe", "john@example.com", "securepassword123")
 
     with pytest.raises(ValueError):
         Place(
@@ -75,7 +75,7 @@ def test_place_invalid_price_negative():
 # ==========================================================
 
 def test_place_invalid_latitude():
-    owner = User("John", "Doe", "john@example.com")
+    owner = User("John", "Doe", "john@example.com", "securepassword123")
 
     with pytest.raises(ValueError):
         Place(
@@ -92,7 +92,7 @@ def test_place_invalid_latitude():
 # ==========================================================
 
 def test_place_invalid_longitude():
-    owner = User("John", "Doe", "john@example.com")
+    owner = User("John", "Doe", "john@example.com", "securepassword123")
 
     with pytest.raises(ValueError):
         Place(
