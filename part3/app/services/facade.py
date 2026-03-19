@@ -1,9 +1,14 @@
 from app.persistence.repository import InMemoryRepository
 import uuid
+
+# App Model Imports
 from app.models.user import User
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.review import Review
+
+# SQLAlchemy Instance import (when we get to it)
+from app import db
 
 class HBnBFacade:
     def __init__(self):
@@ -18,26 +23,9 @@ class HBnBFacade:
     
     #  Method for creating a user
     def create_user(self, user_data):
-        # Required fields
-        required = ["first_name", "last_name", "email"]
-        for field in required:
-            if field not in user_data:
-                raise ValueError(f"Missing required field: {field}")
-
-        # Basic email format check
-        email = user_data["email"]
-        if "@" not in email or "." not in email:
-            raise ValueError("Invalid email format")
-
-        # Duplicate email check
-        if self.get_user_by_email(email):
-            raise ValueError("Email already exists")
-
-        # Create and store user
         user = User(**user_data)
         self.user_repo.add(user)
         return user
-
 
 
     #  Gets the user
@@ -168,7 +156,7 @@ class HBnBFacade:
                 raise ValueError("Rating must be between 1 and 5")
             review.rating = review_data['rating']
         
-        self.review_repo.add(review)
+        self.review_repo.update(review_id, review)
         return review
 
     def delete_review(self, review_id):
@@ -180,8 +168,6 @@ class HBnBFacade:
         self.review_repo.delete(review_id)
         return True
 
-    def get_review_by_id(self, review_id):
-        return self.get_review(review_id)
 
     # ==========================================================================
     # AMENITY METHODS
@@ -210,12 +196,26 @@ class HBnBFacade:
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
             return None
-
-        # Re-run validation before updating
-        # Return an empty string if the key 'name' isn't there 
-        name = amenity_data.get('name', '')
-        if not name or not isinstance(name, str) or len(name) > 50:
-            raise ValueError("Amenity name must be a non-empty string of max 50 characters")
-
         self.amenity_repo.update(amenity_id, amenity_data)
         return amenity
+    
+
+# --------------------------------------------------------------------------------------------------------
+
+
+# Function for updating user information so that it is saved within the database (persists)
+def update_user(user: User) -> User:
+    try:
+        # adds new user, commits the changes to persist updates and refreshes to retrieve updated state
+        db.session.add(user)
+        db.session.commit()
+        db.session.refresh(user)
+        return user
+    except Exception as e:
+        # rolls back if an error occurs
+        db.session.rollback()
+        raise e
+    
+# Function for filtering amenities by name (helpful for admin if amenity already exists)
+def get_amenity_by_name(name: str) -> Amenity | None: # amenity object if found, otherwise none
+    return db.session.query(Amenity).filter(Amenity.name == name).first()
