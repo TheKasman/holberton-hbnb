@@ -1,51 +1,55 @@
-"""User class module"""
+"""User model module"""
 
 import re
-from app.models.base_model import BaseModel
-
+from app.models.baseclass import BaseModel
+from app.extensions import db, bcrypt
 
 
 class User(BaseModel):
-    """Constructor"""
-    def __init__(self, first_name, last_name, email, password, is_admin=False):
-        super().__init__()
+    __tablename__ = "users"
 
-        #  Variable Validation
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+
+    # Email must be unique for login purposes
+    email = db.Column(db.String(120), nullable=False, unique=True, index=True)
+
+    # Stores hashed password only (never plain text)
+    password = db.Column(db.String(128), nullable=False)
+
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)
+
+    # -------------------------
+    # Validation Methods
+    # -------------------------
+
+    def set_first_name(self, first_name):
         if not isinstance(first_name, str) or not first_name.strip():
             raise ValueError("first_name must be a non-empty string")
 
+        self.first_name = first_name.strip()
+
+    def set_last_name(self, last_name):
         if not isinstance(last_name, str) or not last_name.strip():
             raise ValueError("last_name must be a non-empty string")
 
-        if not isinstance(email, str) or not email.strip():
-            raise ValueError("email bust be a non-empty string")
+        self.last_name = last_name.strip()
 
-        #  Email structure validation.
-        #  I.e. permits emails with underscores, dots etc.
+    def set_email(self, email):
+        if not isinstance(email, str) or not email.strip():
+            raise ValueError("email must be a non-empty string")
+
         email_regex = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         if not re.match(email_regex, email):
             raise ValueError("Invalid email format")
 
-        if not isinstance(is_admin, bool):
-            raise ValueError("is_admin must be a boolean")
-
-        self.first_name = first_name.strip()
-        self.last_name = last_name.strip()
         self.email = email.strip()
-        self.is_admin = is_admin
 
-        #  Password hashing and initialisation
+    def set_password(self, password):
         if not isinstance(password, str) or not password.strip():
             raise ValueError("password must be a non-empty string")
 
-        self.hash_password(password.strip())
-
-    def hash_password(self, password):
-        """Hashes the password before storing it"""
-        from app import bcrypt
-        self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+        self.password = bcrypt.generate_password_hash(password).decode("utf-8")
 
     def verify_password(self, password):
-        """Verifies if the provided password matches the hashed password."""
-        from app import bcrypt
         return bcrypt.check_password_hash(self.password, password)
