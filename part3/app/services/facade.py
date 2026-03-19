@@ -2,6 +2,7 @@
 from app.persistence.repository import SQLAlchemyRepository
 from app.persistence.user_repository import UserRepository
 from app.persistence.place_repository import PlaceRepository
+from app.persistence.review_repository import ReviewRepository
 from app.models.user import User
 from app.models.amenity import Amenity
 from app.models.place import Place
@@ -14,7 +15,7 @@ class HBnBFacade:
         """Constructor"""
         self.user_repo = UserRepository()
         self.place_repo = PlaceRepository()
-        self.review_repo = SQLAlchemyRepository(Review)  # Most likely for later
+        self.review_repo = ReviewRepository()
         self.amenity_repo = SQLAlchemyRepository(Amenity)  # Most likely for later
 
     # ==========================================================================
@@ -74,12 +75,10 @@ class HBnBFacade:
         # ==========================================================
         # NOTE:
         # Relationships temporarily disabled (per instructions)
-        # These will be reintroduced later with proper ORM mapping
         # ==========================================================
 
         # place.owner = owner
 
-        # Amenities via amenity_ids
         amenity_ids = place_data.get("amenity_ids", [])
 
         if not isinstance(amenity_ids, list):
@@ -133,10 +132,23 @@ class HBnBFacade:
         if not place:
             raise ValueError("Place not found")
 
-        review = Review(**review_data)
+        # ==========================
+        # Create review using setters
+        # ==========================
+        review = Review()
+        review.set_text(review_data["text"])
+        review.set_rating(review_data["rating"])
+        review.set_user(review_data["user_id"])
+        review.set_place(review_data["place_id"])
+
         self.review_repo.add(review)
 
+        # ==========================================================
+        # NOTE:
+        # Relationship temporarily disabled
+        # ==========================================================
         # place.add_review(review)
+
         return review
 
     def get_review(self, review_id):
@@ -163,12 +175,10 @@ class HBnBFacade:
             raise ValueError("Review not found")
 
         if 'text' in review_data:
-            review.text = review_data['text']
+            review.set_text(review_data['text'])
 
         if 'rating' in review_data:
-            if not 1 <= review_data['rating'] <= 5:
-                raise ValueError("Rating must be between 1 and 5")
-            review.rating = review_data['rating']
+            review.set_rating(review_data['rating'])
 
         self.review_repo.add(review)
         return review
