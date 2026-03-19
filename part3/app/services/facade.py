@@ -66,12 +66,13 @@ class HBnBFacade:
         # ==========================
         # Create place using setters
         # ==========================
-        place = Place()
-        place.set_title(place_data["title"])
-        place.set_description(place_data.get("description", ""))
-        place.set_price(place_data["price"])
-        place.set_latitude(place_data["latitude"])
-        place.set_longitude(place_data["longitude"])
+        place = Place(
+        title=place_data["title"],
+        description=place_data.get("description", ""),
+        price=place_data["price"],
+        latitude=place_data["latitude"],
+        longitude=place_data["longitude"]
+        )
 
         # ==========================================================
         # NOTE:
@@ -136,11 +137,12 @@ class HBnBFacade:
         # ==========================
         # Create review using setters
         # ==========================
-        review = Review()
-        review.set_text(review_data["text"])
-        review.set_rating(review_data["rating"])
-        review.set_user(review_data["user_id"])
-        review.set_place(review_data["place_id"])
+        review = Review(
+        text=review_data["text"],
+        rating=review_data["rating"],
+        place_id=review_data["place_id"],
+        user_id=review_data["user_id"]
+        )
 
         self.review_repo.add(review)
 
@@ -202,9 +204,9 @@ class HBnBFacade:
     # ==========================================================================
 
     def create_amenity(self, amenity_data):
-        """Create a new amenity and store it in the repository."""
-        amenity = Amenity()
-        amenity.set_name(amenity_data['name'])
+        amenity = Amenity(
+        name=amenity_data["name"]
+        )
         self.amenity_repo.add(amenity)
         return amenity
 
