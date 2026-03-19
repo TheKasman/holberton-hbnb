@@ -1,6 +1,7 @@
 """The HBNB Facade"""
 from app.persistence.repository import SQLAlchemyRepository
 from app.persistence.user_repository import UserRepository
+from app.persistence.place_repository import PlaceRepository
 from app.models.user import User
 from app.models.amenity import Amenity
 from app.models.place import Place
@@ -12,7 +13,7 @@ class HBnBFacade:
     def __init__(self):
         """Constructor"""
         self.user_repo = UserRepository()
-        self.place_repo = SQLAlchemyRepository(Place)  # Most likely for later
+        self.place_repo = PlaceRepository()
         self.review_repo = SQLAlchemyRepository(Review)  # Most likely for later
         self.amenity_repo = SQLAlchemyRepository(Amenity)  # Most likely for later
 
