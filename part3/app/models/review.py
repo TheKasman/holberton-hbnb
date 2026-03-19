@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-"""Module containing the key informatino for the Review object"""
+"""Module containing the key information for the Review object"""
+
 from app.models.baseclass import BaseModel
 from app.extensions import db
 
 
-# defines a Review class to represent a review object
 class Review(BaseModel):
     """Review class blueprint"""
 
@@ -13,8 +13,6 @@ class Review(BaseModel):
     # ==========================
     # Columns Mapping
     # ==========================
-    id = db.Column(db.Integer, primary_key=True)
-
     text = db.Column(db.String(500), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
@@ -28,9 +26,18 @@ class Review(BaseModel):
     # ==========================================================
 
     # ==========================
+    # Constructor
+    # ==========================
+    def __init__(self, text, rating, place_id, user_id):
+        super().__init__()
+        self.set_text(text)
+        self.set_rating(rating)
+        self.set_place(place_id)
+        self.set_user(user_id)
+
+    # ==========================
     # Validation Methods
     # ==========================
-
     def set_text(self, text):
         """Validate and set review text"""
         if not isinstance(text, str) or not text:
@@ -58,9 +65,8 @@ class Review(BaseModel):
     # ==========================
     # Serialization
     # ==========================
-
     def to_dict(self):
-        """Converts the review object to a serializable dictionary"""
+        """Convert the review object to a dictionary"""
         return {
             "id": self.id,
             "text": self.text,
