@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Module for class amenity"""
+
 from app.models.baseclass import BaseModel
 from app.extensions import db
 
@@ -12,8 +13,6 @@ class Amenity(BaseModel):
     # ==========================
     # Columns Mapping
     # ==========================
-    id = db.Column(db.Integer, primary_key=True)
-
     name = db.Column(db.String(50), nullable=False)
 
     # ==========================================================
@@ -22,9 +21,15 @@ class Amenity(BaseModel):
     # ==========================================================
 
     # ==========================
+    # Constructor
+    # ==========================
+    def __init__(self, name):
+        super().__init__()
+        self.set_name(name)
+
+    # ==========================
     # Validation Methods
     # ==========================
-
     def set_name(self, name):
         """Validate and set amenity name"""
         if not name or not isinstance(name, str) or len(name) > 50:
@@ -34,7 +39,6 @@ class Amenity(BaseModel):
     # ==========================
     # Serialization
     # ==========================
-
     def to_dict(self):
         return {
             'id': self.id,
