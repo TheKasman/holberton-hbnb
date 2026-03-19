@@ -56,20 +56,28 @@ class HBnBFacade:
             if field not in place_data:
                 raise ValueError(f"Missing required field: {field}")
 
-        # Validate owner exists
+        # Validate owner exists (kept for future relationship use)
         owner = self.user_repo.get(place_data["owner_id"])
         if not owner:
             raise ValueError("Owner not found")
 
-        # Create place
-        place = Place(
-            title=place_data["title"],
-            description=place_data.get("description", ""),
-            price=place_data["price"],
-            latitude=place_data["latitude"],
-            longitude=place_data["longitude"],
-            owner=owner
-        )
+        # ==========================
+        # Create place using setters
+        # ==========================
+        place = Place()
+        place.set_title(place_data["title"])
+        place.set_description(place_data.get("description", ""))
+        place.set_price(place_data["price"])
+        place.set_latitude(place_data["latitude"])
+        place.set_longitude(place_data["longitude"])
+
+        # ==========================================================
+        # NOTE:
+        # Relationships temporarily disabled (per instructions)
+        # These will be reintroduced later with proper ORM mapping
+        # ==========================================================
+
+        # place.owner = owner
 
         # Amenities via amenity_ids
         amenity_ids = place_data.get("amenity_ids", [])
@@ -77,12 +85,11 @@ class HBnBFacade:
         if not isinstance(amenity_ids, list):
             raise ValueError("amenity_ids must be a list")
 
-        # Validate and attach amenities
-        for amenity_id in amenity_ids:
-            amenity = self.amenity_repo.get(amenity_id)
-            if not amenity:
-                raise ValueError(f"Amenity '{amenity_id}' not found")
-            place.add_amenity(amenity)
+        # for amenity_id in amenity_ids:
+        #     amenity = self.amenity_repo.get(amenity_id)
+        #     if not amenity:
+        #         raise ValueError(f"Amenity '{amenity_id}' not found")
+        #     place.add_amenity(amenity)
 
         self.place_repo.add(place)
         return place
@@ -129,7 +136,7 @@ class HBnBFacade:
         review = Review(**review_data)
         self.review_repo.add(review)
 
-        place.add_review(review)
+        # place.add_review(review)
         return review
 
     def get_review(self, review_id):
