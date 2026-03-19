@@ -3,6 +3,7 @@ from app.persistence.repository import SQLAlchemyRepository
 from app.persistence.user_repository import UserRepository
 from app.persistence.place_repository import PlaceRepository
 from app.persistence.review_repository import ReviewRepository
+from app.persistence.amenity_repository import AmenityRepository
 from app.models.user import User
 from app.models.amenity import Amenity
 from app.models.place import Place
@@ -16,7 +17,7 @@ class HBnBFacade:
         self.user_repo = UserRepository()
         self.place_repo = PlaceRepository()
         self.review_repo = ReviewRepository()
-        self.amenity_repo = SQLAlchemyRepository(Amenity)  # Most likely for later
+        self.amenity_repo = AmenityRepository()
 
     # ==========================================================================
     # USER METHODS
@@ -202,7 +203,8 @@ class HBnBFacade:
 
     def create_amenity(self, amenity_data):
         """Create a new amenity and store it in the repository."""
-        amenity = Amenity(name=amenity_data['name'])
+        amenity = Amenity()
+        amenity.set_name(amenity_data['name'])
         self.amenity_repo.add(amenity)
         return amenity
 
@@ -220,9 +222,8 @@ class HBnBFacade:
         if not amenity:
             return None
 
-        name = amenity_data.get('name', '')
-        if not name or not isinstance(name, str) or len(name) > 50:
-            raise ValueError("Amenity name must be a non-empty string of max 50 characters")
+        if 'name' in amenity_data:
+            amenity.set_name(amenity_data['name'])
 
-        self.amenity_repo.update(amenity_id, amenity_data)
+        self.amenity_repo.add(amenity)
         return amenity
