@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Module for class amenity"""
-from app.models.base_model import BaseModel
+from app.models.baseclass import BaseModel
 from app.extensions import db
 
 

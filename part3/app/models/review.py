@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Module containing the key informatino for the Review object"""
-from app.models.base_model import BaseModel
+from app.models.baseclass import BaseModel
 from app.extensions import db
 
 
