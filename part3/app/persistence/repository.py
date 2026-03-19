@@ -53,7 +53,8 @@ class SQLAlchemyRepository(Repository):
         obj = self.get(obj_id)
         if obj:
             for key, value in data.items():
-                setattr(obj, key, value)
+                if hasattr(obj, key): #  setting only attributes that exist
+                    setattr(obj, key, value)
             db.session.commit()
 
     def delete(self, obj_id):
