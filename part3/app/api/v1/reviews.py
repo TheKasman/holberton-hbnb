@@ -1,6 +1,5 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
-from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services import facade
 
 api = Namespace('reviews', description='Review operations')
@@ -12,6 +11,7 @@ api = Namespace('reviews', description='Review operations')
 review_model = api.model('Review', {
     'text': fields.String(required=True, description='Text of the review'),
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
+    'user_id': fields.String(required=True, description='ID of the user'),
     'place_id': fields.String(required=True, description='ID of the place')
 })
 
@@ -26,17 +26,12 @@ update_review_model = api.model('UpdateReview', {
 
 @api.route('/')
 class ReviewList(Resource):
-    """Core functionality for review lists."""
-
-    @jwt_required()
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
-    @api.response(401, 'Authentication required')
     def post(self):
-        """Create a new review (authenticated users only)"""
-        current_user_id = get_jwt_identity()
-        data = dict(api.payload)
+        """Register a new review"""
+        data = request.json
 
         # Validate rating
         if not 1 <= data.get('rating', 0) <= 5:
@@ -64,7 +59,7 @@ class ReviewList(Resource):
 
         try:
             review = facade.create_review(data)
-            return review.to_dict(), 201
+            return review, 201
         except ValueError as e:
             return {'error': str(e)}, 400
 
@@ -73,6 +68,8 @@ class ReviewList(Resource):
         reviews = facade.get_all_reviews()
         return [review.to_dict() for review in reviews], 200
 
+        return reviews, 200  
+        
 
 @api.route('/<review_id>')
 class ReviewResource(Resource):
@@ -86,12 +83,10 @@ class ReviewResource(Resource):
         if not review:
             return {'error': 'Review not found'}, 404
 
-        return review.to_dict(), 200
+        return review, 200
 
-    @jwt_required()
-    @api.expect(update_review_model)
+    @api.expect(review_model)
     @api.response(200, 'Review updated successfully')
-    @api.response(403, 'Unauthorized action')
     @api.response(404, 'Review not found')
     @api.response(400, 'Invalid input data')
     def put(self, review_id):
@@ -115,11 +110,11 @@ class ReviewResource(Resource):
             updated_review = facade.update_review(review_id, data)
             return updated_review.to_dict(), 200
         except ValueError as e:
-            return {'error': str(e)}, 400
+            api.abort(400, str(e))
+        except KeyError:
+            api.abort(404, 'Review not found')
 
-    @jwt_required()
     @api.response(200, 'Review deleted successfully')
-    @api.response(403, 'Unauthorized action')
     @api.response(404, 'Review not found')
     def delete(self, review_id):
         """Delete a review (author only)"""
