@@ -2,7 +2,7 @@
 
 import re
 from app.models.baseclass import BaseModel
-from app import db, bcrypt
+from app.extensions import db, bcrypt
 
 
 class User(BaseModel):

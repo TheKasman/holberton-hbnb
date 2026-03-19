@@ -1,7 +1,7 @@
 """Repository layer (SQLAlchemy)"""
 
 from abc import ABC, abstractmethod
-from app import db
+from app.extensions import db
 
 
 class Repository(ABC):
@@ -41,6 +41,7 @@ class SQLAlchemyRepository(Repository):
 
     def add(self, obj):
         """Add object"""
+        from app import db
         db.session.add(obj)
         db.session.commit()
         return obj
@@ -55,6 +56,7 @@ class SQLAlchemyRepository(Repository):
 
     def update(self, obj_id, data):
         """Update fields"""
+        from app import db
         obj = self.get(obj_id)
         if not obj:
             return None
@@ -76,6 +78,7 @@ class SQLAlchemyRepository(Repository):
 
     def delete(self, obj_id):
         """Delete by id"""
+        from app import db
         obj = self.get(obj_id)
         if not obj:
             return None
