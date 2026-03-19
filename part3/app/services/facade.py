@@ -1,4 +1,5 @@
-from app.persistence.repository import InMemoryRepository
+"""The HBNB Facade"""
+from app.persistence.repository import SQLAlchemyRepository
 import uuid
 
 # App Model Imports
@@ -11,30 +12,31 @@ from app.models.review import Review
 from app import db
 
 class HBnBFacade:
+    """Our HBNB Facade class"""
     def __init__(self):
-        self.user_repo = InMemoryRepository()
-        self.place_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
-        self.amenity_repo = InMemoryRepository()
+        """Constructor"""
+        self.user_repo = SQLAlchemyRepository(User)
+        self.place_repo = SQLAlchemyRepository(Place) #  Most likely for later
+        self.review_repo = SQLAlchemyRepository(Review) #  Most likely for later
+        self.amenity_repo = SQLAlchemyRepository(Amenity) #  Most likely for later
 
     # ==========================================================================
     # USER METHODS
     # ==========================================================================
-    
-    #  Method for creating a user
+
     def create_user(self, user_data):
+        """Method for creating a user"""
+        # Create and store user
         user = User(**user_data)
         self.user_repo.add(user)
         return user
 
-
-    #  Gets the user
     def get_user(self, user_id):
+        """Gets the user"""
         return self.user_repo.get(user_id)
-    
 
-    #  Gets the user's email
     def get_user_by_email(self, email):
+        """Gets the user's email"""
         return self.user_repo.get_by_attribute('email', email)
 
     # ==========================================================================
@@ -42,7 +44,7 @@ class HBnBFacade:
     # ==========================================================================
 
     def create_place(self, place_data):
-        # Ensure required fields
+        """Create a place"""
         req_fields = ["title", "price", "latitude", "longitude", "owner_id"]
         for field in req_fields:
             if field not in place_data:
@@ -52,7 +54,7 @@ class HBnBFacade:
         owner = self.user_repo.get(place_data["owner_id"])
         if not owner:
             raise ValueError("Owner not found")
-        
+
         # Create place
         place = Place(
             title=place_data["title"],
@@ -80,12 +82,15 @@ class HBnBFacade:
         return place
 
     def get_place(self, place_id):
+        """Get the place"""
         return self.place_repo.get(place_id)
 
     def get_all_places(self):
+        """Get ALL the places"""
         return self.place_repo.get_all()
 
     def update_place(self, place_id, place_data):
+        """Updates a place object"""
         place = self.get_place(place_id)
         if not place:
             raise ValueError("Place not found")
@@ -100,24 +105,25 @@ class HBnBFacade:
 
     # Placeholder methods for creating a review
     def create_review(self, review_data):
+        """Creates a review"""
         required_fields = ['text', 'rating', 'user_id', 'place_id']
         for field in required_fields:
             if field not in review_data:
                 raise ValueError(f"Missing required field: {field}")
-            
+
         if not 1 <= review_data['rating'] <= 5:
             raise ValueError("Rating must be between 1 and 5")
-            
+
         # check if user exists
         user = self.get_user(review_data['user_id'])
         if not user:
             raise ValueError("User not found")
-            
+
         # check if place exists
         place = self.get_place(review_data['place_id'])
         if not place:
             raise ValueError("Place not found")
-            
+
         review = Review(**review_data)
         self.review_repo.add(review)
 
@@ -126,27 +132,28 @@ class HBnBFacade:
         return review
 
     def get_review(self, review_id):
-        # gets a review by ID from the review repository
+        """gets a review by ID from the review repository"""
         return self.review_repo.get(review_id)
 
     def get_all_reviews(self):
-        # gets all reviews from the review repository
+        """gets all reviews from the review repository"""
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
+        """filters reviews by place_id and returns the list of reviews for that place"""
         place = self.get_place(place_id)
         if not place:
             raise ValueError("Place not found")
-        
-        # filters reviews by place_id and returns the list of reviews for that place
+
         reviews = self.review_repo.get_all()
         return [review for review in reviews if review.place_id == place_id]
 
     def update_review(self, review_id, review_data):
+        """Update a review"""
         review = self.get_review(review_id)
         if not review:
             raise ValueError("Review not found")
-        
+
         # updates the review's text and rating based on the provided review_data
         if 'text' in review_data:
             review.text = review_data['text']
@@ -155,24 +162,28 @@ class HBnBFacade:
             if not 1 <= review_data['rating'] <= 5:
                 raise ValueError("Rating must be between 1 and 5")
             review.rating = review_data['rating']
-        
-        self.review_repo.update(review_id, review)
+
+        self.review_repo.add(review)
         return review
 
     def delete_review(self, review_id):
+        """Delete a review"""
         review = self.get_review(review_id)
         if not review:
             raise ValueError("Review not found")
-        
+
         # deletes the review from the review repository
         self.review_repo.delete(review_id)
         return True
 
+    def get_review_by_id(self, review_id):
+        """Get a review by a particular id"""
+        return self.get_review(review_id)
 
     # ==========================================================================
     # AMENITY METHODS
     # ==========================================================================
-    
+
     # Create an amenity
     def create_amenity(self, amenity_data):
         """Create a new amenity and store it in the repository."""
@@ -196,6 +207,13 @@ class HBnBFacade:
         amenity = self.amenity_repo.get(amenity_id)
         if not amenity:
             return None
+
+        # Re-run validation before updating
+        # Return an empty string if the key 'name' isn't there
+        name = amenity_data.get('name', '')
+        if not name or not isinstance(name, str) or len(name) > 50:
+            raise ValueError("Amenity name must be a non-empty string of max 50 characters")
+
         self.amenity_repo.update(amenity_id, amenity_data)
         return amenity
     
