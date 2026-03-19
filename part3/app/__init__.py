@@ -8,11 +8,10 @@ from app.api.v1.places import api as places_ns
 from app.api.v1.auth import api as auth_ns
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
+from app.extensions import db, bcrypt
 
 
-bcrypt = Bcrypt()
 jwt = JWTManager()
-db = SQLAlchemy()
 
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
