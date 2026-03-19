@@ -1,10 +1,12 @@
-"""Repository code, currently switching from In-memory to SQLAlchemy"""
+"""Repository layer (SQLAlchemy)"""
 
 from abc import ABC, abstractmethod
 from app import db
 
 
 class Repository(ABC):
+    """CRUD interface"""
+
     @abstractmethod
     def add(self, obj):
         pass
@@ -29,41 +31,61 @@ class Repository(ABC):
     def get_by_attribute(self, attr_name, attr_value):
         pass
 
+
 class SQLAlchemyRepository(Repository):
-    """Our new SQLAlchemy implementation"""
+    """Generic SQLAlchemy repository"""
+
     def __init__(self, model):
-        """constructor"""
+        """Set model"""
         self.model = model
 
-    def add (self, obj):
-        """Adds something to the tables"""
+    def add(self, obj):
+        """Add object"""
         db.session.add(obj)
         db.session.commit()
+        return obj
 
     def get(self, obj_id):
-        """Get a thing"""
-        return self.model.query.get(obj_id)
+        """Get by id"""
+        return db.session.get(self.model, obj_id)
 
     def get_all(self):
-        """Get all the things"""
+        """Get all"""
         return self.model.query.all()
 
     def update(self, obj_id, data):
-        """Update an entry"""
+        """Update fields"""
         obj = self.get(obj_id)
-        if obj:
-            for key, value in data.items():
-                if hasattr(obj, key): #  setting only attributes that exist
-                    setattr(obj, key, value)
-            db.session.commit()
+        if not obj:
+            return None
+
+        ignore_fields = {"id", "created_at"}
+
+        for key, value in data.items():
+            if key in ignore_fields:
+                continue
+
+            setter_method = f"set_{key}"
+            if hasattr(obj, setter_method):
+                getattr(obj, setter_method)(value)
+            elif hasattr(obj, key):
+                setattr(obj, key, value)
+
+        db.session.commit()
+        return obj
 
     def delete(self, obj_id):
-        """Delete a thing"""
+        """Delete by id"""
         obj = self.get(obj_id)
-        if obj:
-            db.session.delete(obj)
-            db.session.commit()
+        if not obj:
+            return None
+
+        db.session.delete(obj)
+        db.session.commit()
+        return obj
 
     def get_by_attribute(self, attr_name, attr_value):
-        """Get by a certain attribute"""
-        return self.model.query.filter_by(**{attr_name: attr_value}).first()
+        """Get by attribute"""
+        return self.model.query.filter_by(
+            **{attr_name: attr_value}
+        ).first()
