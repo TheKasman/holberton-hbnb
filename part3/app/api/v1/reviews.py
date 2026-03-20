@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from app.services import facade
 
 api = Namespace('reviews', description='Review operations')
@@ -33,6 +33,8 @@ class ReviewList(Resource):
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
     @api.response(401, 'Authentication required')
+    @api.response(403, 'Forbidden')
+    @api.response(404, 'Place not found')
     def post(self):
         """Create a new review (authenticated users only)"""
         current_user_id = get_jwt_identity()
@@ -47,11 +49,9 @@ class ReviewList(Resource):
         if not place:
             return {'error': 'Place not found'}, 404
 
-        # ==================================================
-        # NOTE: Ownership check disabled (no relationships yet)
-        # ==================================================
-        # if place.owner.id != current_user_id:
-        #     return {"error": "Unauthorized"}, 403
+        # Users cannot review their own place
+        if place.owner.id == current_user_id:
+            return {"error": "You cannot review your own place"}, 400
 
         # Prevent duplicate review per user per place
         existing_reviews = facade.get_reviews_by_place(data.get('place_id'))
@@ -97,12 +97,15 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review (author only)"""
         current_user_id = get_jwt_identity()
+        is_admin = get_jwt().get('is_admin', False)
+
         review = facade.get_review_by_id(review_id)
 
         if not review:
             return {'error': 'Review not found'}, 404
 
-        if review.user_id != current_user_id:
+        # Admins bypass authorship check; regular users must own the review
+        if not is_admin and review.user_id != current_user_id:
             return {'error': 'Unauthorized action'}, 403
 
         data = request.json
@@ -124,12 +127,15 @@ class ReviewResource(Resource):
     def delete(self, review_id):
         """Delete a review (author only)"""
         current_user_id = get_jwt_identity()
+        is_admin = get_jwt().get('is_admin', False)
+
         review = facade.get_review_by_id(review_id)
 
         if not review:
             return {'error': 'Review not found'}, 404
 
-        if review.user_id != current_user_id:
+        # Admins bypass authorship check; regular users must own the review
+        if not is_admin and review.user_id != current_user_id:
             return {'error': 'Unauthorized action'}, 403
 
         deleted = facade.delete_review(review_id)

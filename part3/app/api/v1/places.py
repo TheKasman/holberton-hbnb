@@ -1,6 +1,6 @@
 from flask import request
 from flask_restx import Namespace, Resource, fields
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from .users import user_model
 from .amenities import amenity_model
 from app.services import facade
@@ -48,6 +48,9 @@ class PlaceList(Resource):
 
     @jwt_required()
     @api.expect(place_model, validate=True)
+    @api.response(201, 'Place successfully created')
+    @api.response(400, 'Invalid input data')
+    @api.response(401, 'Authentication required')
     def post(self):
         """Create a new place (authenticated users only)"""
         current_user_id = get_jwt_identity()
@@ -83,7 +86,7 @@ class PlaceList(Resource):
             "price": place.price,
             "latitude": place.latitude,
             "longitude": place.longitude,
-            "owner_id": None  # ⚠️ TEMP (no relationship yet)
+            "owner_id": place.owner_id
         } for place in places], 200
 
 
@@ -130,41 +133,40 @@ class PlaceResource(Resource):
             "price": place.price,
             "latitude": place.latitude,
             "longitude": place.longitude,
-
-            # ==================================================
-            # NOTE: Relationships disabled temporarily
-            # ==================================================
-
-            # "owner": {
-            #     "id": place.owner.id,
-            #     "first_name": place.owner.first_name,
-            #     "last_name": place.owner.last_name,
-            #     "email": place.owner.email
-            # },
-
-            # "amenities": [
-            #     {
-            #         "id": amenity.id,
-            #         "name": amenity.name
-            #     } for amenity in place.amenities
-            # ]
+            "owner_id": place.owner_id,
+            "owner": {
+                "id": place.owner.id,
+                "first_name": place.owner.first_name,
+                "last_name": place.owner.last_name,
+                "email": place.owner.email
+            } if place.owner else None,
+            "amenities": [
+                {
+                    "id": amenity.id,
+                    "name": amenity.name
+                } for amenity in place.amenities
+            ]
         }, 200
 
     @jwt_required()
     @api.expect(update_place_model, validate=True)
+    @api.response(200, 'Place updated successfully')
+    @api.response(403, 'Unauthorized action')
+    @api.response(404, 'Place not found')
+    @api.response(400, 'Invalid input data')
     def put(self, place_id):
         """Update a place (owner only)"""
         current_user_id = get_jwt_identity()
+        is_admin = get_jwt().get('is_admin', False)
+    
         place = facade.get_place(place_id)
 
         if not place:
             return {"error": "Place not found"}, 404
 
-        # ==================================================
-        # NOTE: Ownership check disabled (no relationship yet)
-        # ==================================================
-        # if place.owner.id != current_user_id:
-        #     return {"error": "Unauthorized action"}, 403
+        # Admins bypass ownership check; regular users must own the place
+        if not is_admin and place.owner.id != current_user_id:
+            return {"error": "Unauthorized action"}, 403
 
         try:
             place = facade.update_place(place_id, request.json)

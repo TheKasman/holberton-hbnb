@@ -46,6 +46,11 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         """Gets the user's email"""
         return self.user_repo.get_user_by_email(email)
+    
+    def update_user(self, user):
+        """Persists an already-modified user object"""
+        self.user_repo.add(user)
+        return user
 
     # ==========================================================================
     # PLACE METHODS
@@ -67,30 +72,25 @@ class HBnBFacade:
         # Create place using setters
         # ==========================
         place = Place(
-        title=place_data["title"],
-        description=place_data.get("description", ""),
-        price=place_data["price"],
-        latitude=place_data["latitude"],
-        longitude=place_data["longitude"]
+            title=place_data["title"],
+            description=place_data.get("description", ""),
+            price=place_data["price"],
+            latitude=place_data["latitude"],
+            longitude=place_data["longitude"],
+            owner_id=place_data["owner_id"]
         )
 
-        # ==========================================================
-        # NOTE:
-        # Relationships temporarily disabled (per instructions)
-        # ==========================================================
-
-        # place.owner = owner
-
+       # Attach amenities (many-to-many)
         amenity_ids = place_data.get("amenity_ids", [])
 
         if not isinstance(amenity_ids, list):
             raise ValueError("amenity_ids must be a list")
 
-        # for amenity_id in amenity_ids:
-        #     amenity = self.amenity_repo.get(amenity_id)
-        #     if not amenity:
-        #         raise ValueError(f"Amenity '{amenity_id}' not found")
-        #     place.add_amenity(amenity)
+        for amenity_id in amenity_ids:
+            amenity = self.amenity_repo.get(amenity_id)
+            if not amenity:
+                raise ValueError(f"Amenity '{amenity_id}' not found")
+            place.amenities.append(amenity)
 
         self.place_repo.add(place)
         return place
@@ -138,10 +138,10 @@ class HBnBFacade:
         # Create review using setters
         # ==========================
         review = Review(
-        text=review_data["text"],
-        rating=review_data["rating"],
-        place_id=review_data["place_id"],
-        user_id=review_data["user_id"]
+            text=review_data["text"],
+            rating=review_data["rating"],
+            place_id=review_data["place_id"],
+            user_id=review_data["user_id"]
         )
 
         self.review_repo.add(review)
@@ -204,9 +204,7 @@ class HBnBFacade:
     # ==========================================================================
 
     def create_amenity(self, amenity_data):
-        amenity = Amenity(
-        name=amenity_data["name"]
-        )
+        amenity = Amenity(name=amenity_data["name"])
         self.amenity_repo.add(amenity)
         return amenity
 
@@ -229,3 +227,8 @@ class HBnBFacade:
 
         self.amenity_repo.add(amenity)
         return amenity
+    
+    def get_amenity_by_name(self, name):
+        """Find an amenity by name"""
+        amenities = self.amenity_repo.get_all()
+        return next((a for a in amenities if a.name == name), None)
