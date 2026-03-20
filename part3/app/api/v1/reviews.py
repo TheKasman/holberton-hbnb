@@ -47,11 +47,9 @@ class ReviewList(Resource):
         if not place:
             return {'error': 'Place not found'}, 404
 
-        # ==================================================
-        # NOTE: Ownership check disabled (no relationships yet)
-        # ==================================================
-        # if place.owner.id != current_user_id:
-        #     return {"error": "Unauthorized"}, 403
+        # Users cannot review their own place
+        if place.owner.id == current_user_id:
+            return {"error": "You cannot review your own place"}, 400
 
         # Prevent duplicate review per user per place
         existing_reviews = facade.get_reviews_by_place(data.get('place_id'))
