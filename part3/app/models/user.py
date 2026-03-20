@@ -19,9 +19,20 @@ class User(BaseModel):
 
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
-    # -------------------------
+    # =========================
+    # Relationships
+    # =========================
+    # One-to-Many: A User can own many Places
+    places = db.relationship('Place', backref='owner', lazy=True,
+                             cascade='all, delete-orphan')
+ 
+    # One-to-Many: A User can write many Reviews
+    reviews = db.relationship('Review', backref='author', lazy=True,
+                              cascade='all, delete-orphan')
+    
+    # =========================
     # Validation Methods
-    # -------------------------
+    # =========================
 
     def set_first_name(self, first_name):
         if not isinstance(first_name, str) or not first_name.strip():

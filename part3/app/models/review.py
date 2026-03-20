@@ -16,14 +16,16 @@ class Review(BaseModel):
     text = db.Column(db.String(500), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
-    # Foreign key fields (relationships not yet implemented)
-    place_id = db.Column(db.String(60), nullable=False)
-    user_id = db.Column(db.String(60), nullable=False)
-
-    # ==========================================================
-    # NOTE:
-    # Relationships will be added later using ForeignKey and ORM
-    # ==========================================================
+    # ==========================
+    # Foreign Keys
+    # ==========================
+    # One-to-Many: Many Reviews belong to one Place
+    place_id = db.Column(db.String(36), db.ForeignKey('places.id'),
+                         nullable=False)
+ 
+    # One-to-Many: Many Reviews belong to one User
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),
+                        nullable=False)
 
     # ==========================
     # Constructor
