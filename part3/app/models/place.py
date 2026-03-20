@@ -1,6 +1,17 @@
 from app.models.baseclass import BaseModel
 from app.extensions import db
 
+# ==========================
+# Association Table
+# ==========================
+# Many-to-Many: Place <-> Amenity
+place_amenity = db.Table(
+    'place_amenity',
+    db.Column('place_id', db.String(36), db.ForeignKey('places.id'),
+              primary_key=True),
+    db.Column('amenity_id', db.String(36), db.ForeignKey('amenities.id'),
+              primary_key=True)
+)
 
 class Place(BaseModel):
     """
@@ -18,16 +29,30 @@ class Place(BaseModel):
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
 
-    # ==========================================================
-    # NOTE:
-    # Relationships removed temporarily per project instructions.
-    # ==========================================================
+    # ==========================
+    # Foreign Keys
+    # ==========================
+    # One-to-Many: Many Places belong to one User
+    owner_id = db.Column(db.String(36), db.ForeignKey('users.id'),
+                         nullable=False)
+ 
+    # ==========================
+    # Relationships
+    # ==========================
+    # One-to-Many: A Place can have many Reviews
+    reviews = db.relationship('Review', backref='place', lazy=True,
+                              cascade='all, delete-orphan')
+ 
+    # Many-to-Many: A Place can have many Amenities
+    amenities = db.relationship('Amenity', secondary=place_amenity,
+                                lazy='subquery',
+                                backref=db.backref('places', lazy=True))
 
     # ==========================
     # Constructor
     # ==========================
     def __init__(self, title, description="", price=None,
-                 latitude=None, longitude=None, owner=None):
+                 latitude=None, longitude=None, owner_id=None):
         super().__init__()
 
         self.set_title(title)
@@ -36,8 +61,8 @@ class Place(BaseModel):
         self.set_latitude(latitude)
         self.set_longitude(longitude)
 
-        # owner will be used later (relationships phase)
-        # self.owner = owner
+        if owner_id:
+            self.owner_id = owner_id
 
     # ==========================
     # Validation Methods

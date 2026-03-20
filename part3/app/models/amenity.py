@@ -15,10 +15,12 @@ class Amenity(BaseModel):
     # ==========================
     name = db.Column(db.String(50), nullable=False)
 
-    # ==========================================================
-    # NOTE:
-    # Relationships will be added later (e.g., Place <-> Amenity)
-    # ==========================================================
+    # ==========================
+    # Relationships
+    # ==========================
+    # Many-to-Many: Amenity <-> Place
+    # The `places` backref is defined on Place.amenities via place_amenity
+    # association table — accessible here as:  amenity_instance.places
 
     # ==========================
     # Constructor
