@@ -48,6 +48,9 @@ class PlaceList(Resource):
 
     @jwt_required()
     @api.expect(place_model, validate=True)
+    @api.response(201, 'Place successfully created')
+    @api.response(400, 'Invalid input data')
+    @api.response(401, 'Authentication required')
     def post(self):
         """Create a new place (authenticated users only)"""
         current_user_id = get_jwt_identity()
@@ -147,6 +150,10 @@ class PlaceResource(Resource):
 
     @jwt_required()
     @api.expect(update_place_model, validate=True)
+    @api.response(200, 'Place updated successfully')
+    @api.response(403, 'Unauthorized action')
+    @api.response(404, 'Place not found')
+    @api.response(400, 'Invalid input data')
     def put(self, place_id):
         """Update a place (owner only)"""
         current_user_id = get_jwt_identity()

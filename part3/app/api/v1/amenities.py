@@ -16,9 +16,11 @@ amenity_model = api.model('Amenity', {
 
 @api.route('/')
 class AmenityList(Resource):
+    @jwt_required()
     @api.expect(amenity_model, validate=True)
     @api.response(201, 'Amenity successfully created')
     @api.response(400, 'Invalid input data')
+    @api.response(403, 'Admin privileges required')
     def post(self):
         """Create a new amenity (admin only)"""
         current_user = get_jwt()
@@ -60,6 +62,7 @@ class AmenityResource(Resource):
     @api.expect(amenity_model, validate=True)
     @api.response(200, 'Amenity updated successfully')
     @api.response(404, 'Amenity not found')
+    @api.response(403, 'Admin privileges required')
     @api.response(400, 'Invalid input data')
     def put(self, amenity_id):
         """Update an amenity (admin only)"""

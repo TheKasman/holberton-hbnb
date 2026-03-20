@@ -90,7 +90,7 @@ class HBnBFacade:
             amenity = self.amenity_repo.get(amenity_id)
             if not amenity:
                 raise ValueError(f"Amenity '{amenity_id}' not found")
-            place.add_amenity(amenity)
+            place.amenities.append(amenity)
 
         self.place_repo.add(place)
         return place
