@@ -1,6 +1,6 @@
 # HBnB - Part 3: Authentication & Database Integration
 
-This part introduces **authentication, authorization, and persistent storage** using SQLAlchemy. The application is upgraded from an in-memory prototype to a **secure, database-backed API** ready for real-world deployment.
+This part introduces **authentication, authorization, and persistent storage** using SQLAlchemy. The application is upgraded from an in-memory prototype to a **secure, database-backed API** ready for deployment.
 
 ---
 
