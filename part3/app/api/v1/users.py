@@ -1,6 +1,5 @@
 from flask_restx import Namespace, Resource, fields
-from flask_jwt_extended import jwt_required, get_jwt
-from flask import request
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 from app.services import facade
 
 api = Namespace('users', description='User operations')
@@ -94,13 +93,14 @@ class UserResource(Resource):
     @api.expect(update_user_model, validate=True)
     @api.response(200, 'User successfully updated')
     @api.response(400, 'Invalid input')
-    @api.response(403, 'Admin privileges required')
+    @api.response(403, 'Unauthorized action')
     @api.response(404, 'User not found')
     def put(self, user_id):
-        """Modify a user's details including email and password (admin only)"""
+        """Modify a user's details. Admins can update any user including email/password.
+        Regular users can only update their own first_name and last_name."""
         current_user = get_jwt()
-        if not current_user.get('is_admin'):
-            return {'error': 'Admin privileges required'}, 403
+        is_admin = current_user.get('is_admin', False)
+        current_user_id = get_jwt_identity()
 
         user = facade.get_user(user_id)
         if not user:
@@ -108,20 +108,35 @@ class UserResource(Resource):
         
         data = dict(api.payload)
 
-        # Check email uniqueness if email is being changed
-        if 'email' in data:
-            existing = facade.get_user_by_email(data['email'])
-            if existing and existing.id != user_id:
-                return {'error': 'Email already in use'}, 400
-            user.set_email(data['email'])
+        if is_admin:
+            # Admins can modify any user's details including email and password
+            if 'email' in data:
+                existing = facade.get_user_by_email(data['email'])
+                if existing and existing.id != user_id:
+                    return {'error': 'Email already in use'}, 400
+                user.set_email(data['email'])
 
 
-        if 'first_name' in data:
-            user.set_first_name(data['first_name'])
-        if 'last_name' in data:
-            user.set_last_name(data['last_name'])
-        if 'password' in data:
-            user.set_password(data['password'])
+            if 'first_name' in data:
+                user.set_first_name(data['first_name'])
+            if 'last_name' in data:
+                user.set_last_name(data['last_name'])
+            if 'password' in data:
+                user.set_password(data['password'])
+
+        else:
+            # Regular users can only edit their own profile
+            if current_user_id != user_id:
+                return {'error': 'Unauthorized action'}, 403
+ 
+            # Email and password changes are not permitted
+            if 'email' in data or 'password' in data:
+                return {'error': 'You cannot modify email or password'}, 400
+ 
+            if 'first_name' in data:
+                user.set_first_name(data['first_name'])
+            if 'last_name' in data:
+                user.set_last_name(data['last_name'])
  
         facade.update_user(user)
  
