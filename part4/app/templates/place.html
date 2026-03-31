@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Details</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
+    <!-- ── HEADER ── -->
+    <header>
+        <a href="index.html">
+            <img src="../static/images/logo.png" alt="HBnB Logo" class="logo">
+        </a>
+        <nav>
+            <a href="index.html" class="login-button" style="background-color: var(--lego-blue); border-bottom-color: #004a80;">Home</a>
+            <a href="login.html" id="login-link" class="login-button">Login</a>
+        </nav>
+    </header>
+ 
+    <!-- ── MAIN ── -->
     <main>
         <section id="place-details">
             <!-- Place details will be populated dynamically -->
@@ -24,6 +36,12 @@
             </form>
         </section>
     </main>
+
+    <!-- ── FOOTER ── -->
+    <footer>
+        <p>&copy; 2026 <strong>HBnB</strong> — All rights reserved.</p>
+    </footer>
+
     <script src="scripts.js"></script>
 </body>
 </html>
