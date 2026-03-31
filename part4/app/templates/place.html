@@ -20,20 +20,64 @@
  
     <!-- ── MAIN ── -->
     <main>
+
+        <!-- Place Details Section -->
         <section id="place-details">
             <!-- Place details will be populated dynamically -->
+            <div class="place-details place-info">
+                <h1>Big Wow Beautiful Apartment</h1>
+                <p><strong>Host:</strong> John Doe</p>
+                <p><strong>Price per night:</strong> $120</p>
+                <p><strong>Description:</strong> A big, comfortable and beautiful and modern apartment in the city center.</p>
+                <p><strong>Amenities:</strong> WiFi, Air Conditioning, Kitchen, Parking, Pool</p>
+            </div>
         </section>
+
+        <!-- Reviews Section -->
         <section id="reviews">
+            <h2>Reviews</h2>
             <!-- Reviews will be populated dynamically -->
+
+            <!-- Example review card -->
+            <div class="review-card">
+                <p><strong>User:</strong> Alice</p>
+                <p><strong>Rating:</strong> 5/5</p>
+                <p>Great place to stay! Very big, comfortable and beautiful.</p>
+            </div>
+
+            <div class="review-card">
+                <p><strong>User:</strong> Bob</p>
+                <p><strong>Rating:</strong> 4/5</p>
+                <p>Big, comfortable and beautiful place, but there was a cockroach in the sink. I named him Billy.</p>
+            </div>
         </section>
+
+        <!-- Add Review Section -->
         <section id="add-review">
+            <!-- If user is already logged in-->
+            <button id="add-review-button" onclick="window.location.href='add_review.html'">
+                Add a Review
+            </button>
+
+            <!-- Inline form -->
+            <div class="add-review form">
             <h2>Add a Review</h2>
-            <form id="review-form">
-                <label for="review-text">Review:</label>
-                <textarea id="review-text" name="review-text" required></textarea>
-                
-                <button type="submit">Submit</button>
-            </form>
+                <form id="review-form">
+                    <label for="review-text">Review:</label>
+                    <textarea id="review-text" name="review-text" required></textarea>
+
+                    <label for="rating">Rating:</label>
+                    <select id="rating" name="rating" required>
+                        <option value="5">5 - Excellent</option>
+                        <option value="4">4 - Good</option>
+                        <option value="3">3 - Average</option>
+                        <option value="2">2 - Poor</option>
+                        <option value="1">1 - Terrible</option>
+                    </select>
+                    
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </section>
     </main>
 
