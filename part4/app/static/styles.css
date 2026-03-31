@@ -2,31 +2,104 @@
   This is a SAMPLE File to get you started. Follow the instructions on the project to complete the tasks. 
   You'll probably need to override some of theese styles.
 */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
+
+:root {
+    --lego-yellow: #ffd502;
+    --lego-dark: #1a1a1a;
+    --lego-red: #e3000b;
+    --lego-white: #ffffff;
+    --lego-blue: #006cb7;
+    --lego-gray: #cccccc;
+}
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Nunito', sans-serif;
 }
 
 body {
     background-color: #f4f4f4;
     color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
+/* ── HEADER ── */
 header {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--lego-yellow);
+    color: #000;
     padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    /* border-bottom: 3px solid rgba(0,0,0,0.12); */
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+    display: block;
+}
+
+/* ── NAV ── */
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 nav a {
-    color: #fff;
+    color: var(--lego-dark);
     text-decoration: none;
-    margin-left: 1rem;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.4rem 0.85rem;
+    border-radius: 4px;
+    transition: background-color 0.15s;
 }
 
+header nav a:hover {
+    background-color: rgba(0,0,0,0.08);
+}
+
+header nav a.login-button {
+    background-color: var(--lego-red);
+    color: var(--lego-white);
+    border-bottom: 3px solid #9e0008;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+header nav a.login-button:hover {
+    background-color: #c8000a;
+}
+
+/* ── MAIN ── */
 main {
     padding: 2rem;
+}
+
+/* ── FOOTER ── */
+footer {
+    background-color: var(--lego-dark);
+    color: var(--lego-gray);
+    text-align: center;
+    padding: 1.25rem 2rem;
+    margin-top: auto;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-top: 3px solid var(--lego-yellow);
+}
+
+footer strong {
+    color: var(--lego-yellow);
 }
