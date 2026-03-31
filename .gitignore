@@ -32,5 +32,4 @@ env/
 *.db
 
 # Secrets / credentials
-config.py
 .env
