@@ -1,0 +1,80 @@
+#!/usr/bin/python3
+"""Module containing the key information for the Review object"""
+
+from app.models.baseclass import BaseModel
+from app.extensions import db
+
+
+class Review(BaseModel):
+    """Review class blueprint"""
+
+    __tablename__ = "reviews"
+
+    # ==========================
+    # Columns Mapping
+    # ==========================
+    text = db.Column(db.String(500), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+
+    # ==========================
+    # Foreign Keys
+    # ==========================
+    # One-to-Many: Many Reviews belong to one Place
+    place_id = db.Column(db.String(36), db.ForeignKey('places.id'),
+                         nullable=False)
+ 
+    # One-to-Many: Many Reviews belong to one User
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'),
+                        nullable=False)
+
+    # ==========================
+    # Constructor
+    # ==========================
+    def __init__(self, text, rating, place_id, user_id):
+        super().__init__()
+        self.set_text(text)
+        self.set_rating(rating)
+        self.set_place(place_id)
+        self.set_user(user_id)
+
+    # ==========================
+    # Validation Methods
+    # ==========================
+    def set_text(self, text):
+        """Validate and set review text"""
+        if not isinstance(text, str) or not text:
+            raise ValueError("Text must be a non-empty string.")
+        self.text = text
+
+    def set_rating(self, rating):
+        """Validate and set rating"""
+        if not isinstance(rating, int) or not (1 <= rating <= 5):
+            raise ValueError("Rating must be an integer between 1 and 5.")
+        self.rating = rating
+
+    def set_place(self, place_id):
+        """Set the place associated with this review."""
+        if not place_id:
+            raise ValueError("Place ID must be provided.")
+        self.place_id = place_id
+
+    def set_user(self, user_id):
+        """Set the user associated with this review."""
+        if not user_id:
+            raise ValueError("User ID must be provided.")
+        self.user_id = user_id
+
+    # ==========================
+    # Serialization
+    # ==========================
+    def to_dict(self):
+        """Convert the review object to a dictionary"""
+        return {
+            "id": self.id,
+            "text": self.text,
+            "rating": self.rating,
+            "place_id": self.place_id,
+            "user_id": self.user_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None
+        }
