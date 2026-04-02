@@ -24,6 +24,7 @@ place_model = api.model('Place', {
     'price': fields.Float(required=True, description='Price per night'),
     'latitude': fields.Float(required=True, description='Latitude (-90 to 90)'),
     'longitude': fields.Float(required=True, description='Longitude (-180 to 180)'),
+    'image_url': fields.String(required=False, description='Image URL'),
     'amenity_ids': fields.List(
         fields.String,
         required=False,
@@ -36,7 +37,8 @@ update_place_model = api.model('UpdatePlace', {
     'description': fields.String(required=False),
     'price': fields.Float(required=False),
     'latitude': fields.Float(required=False),
-    'longitude': fields.Float(required=False)
+    'longitude': fields.Float(required=False),
+    'image_url': fields.String(required=False)
 })
 
 # ============================================================
@@ -69,7 +71,8 @@ class PlaceList(Resource):
                 "price": place.price,
                 "latitude": place.latitude,
                 "longitude": place.longitude,
-                "owner_id": current_user_id   # ✅ FIXED
+                "owner_id": current_user_id,
+                "image_url": place.image_url
             }, 201
 
         except ValueError as e:
@@ -86,7 +89,8 @@ class PlaceList(Resource):
             "price": place.price,
             "latitude": place.latitude,
             "longitude": place.longitude,
-            "owner_id": place.owner_id
+            "owner_id": place.owner_id,
+            "image_url": place.image_url
         } for place in places], 200
 
 
@@ -134,6 +138,7 @@ class PlaceResource(Resource):
             "latitude": place.latitude,
             "longitude": place.longitude,
             "owner_id": place.owner_id,
+            "image_url": place.image_url,
             "owner": {
                 "id": place.owner.id,
                 "first_name": place.owner.first_name,
@@ -178,7 +183,8 @@ class PlaceResource(Resource):
                 "price": place.price,
                 "latitude": place.latitude,
                 "longitude": place.longitude,
-                "owner_id": current_user_id
+                "owner_id": current_user_id,
+                "image_url": place.image_url
             }, 200
 
         except ValueError as e:

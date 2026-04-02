@@ -1,7 +1,3 @@
-/* 
-  This is a SAMPLE File to get you started. Follow the instructions on the project to complete the tasks. 
-  You'll probably need to override some of theese styles.
-*/
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
 
 :root {
@@ -37,7 +33,6 @@ header {
     align-items: center;
     justify-content: space-between;
     height: 64px;
-    /* border-bottom: 3px solid rgba(0,0,0,0.12); */
 }
 
 .logo {
@@ -84,6 +79,79 @@ header nav a.login-button:hover {
 /* ── MAIN ── */
 main {
     padding: 2rem;
+}
+
+/* ── FILTER ── */
+#filter {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    padding: 0.85rem 1.25rem;
+    background: var(--lego-white);
+    border-radius: 6px;
+    border-left: 5px solid var(--lego-yellow);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+}
+
+#filter label {
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--lego-dark);
+    white-space: nowrap;
+}
+ 
+#price-filter {
+    padding: 0.4rem 0.75rem;
+    border: 2px solid var(--lego-dark);
+    border-radius: 4px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    background-color: var(--lego-white);
+    color: var(--lego-dark);
+    cursor: pointer;
+    transition: border-color 0.15s;
+}
+ 
+#price-filter:focus {
+    outline: none;
+    border-color: var(--lego-blue);
+}
+
+/* ── PLACE CARD ── */
+#places-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.place-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: var(--lego-white);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.place-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.10);
+}
+
+.place-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
 }
 
 /* ── FOOTER ── */

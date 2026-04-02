@@ -17,4 +17,15 @@ if rows:
 else:
     print("No users found")
 
+# Look at places
+cursor.execute("SELECT id, title, description, price FROM places;")
+rows = cursor.fetchall()
+print("\nPlaces:")
+if rows:
+    for row in rows:
+        print(row)
+else:
+    print("No places found")
+
+
 conn.close()

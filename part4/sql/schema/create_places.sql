@@ -9,5 +9,6 @@ CREATE TABLE Place (
     latitude FLOAT,
     longitude FLOAT,
     owner_id CHAR(36),
-    FOREIGN KEY (owner_id) REFERENCES User(id)
+    FOREIGN KEY (owner_id) REFERENCES User(id),
+    image_url VARCHAR(512)
 );
