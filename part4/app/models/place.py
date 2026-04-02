@@ -28,6 +28,7 @@ class Place(BaseModel):
     price = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
+    image_url = db.Column(db.String(512), nullable=True)
 
     # ==========================
     # Foreign Keys
