@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_restx import Api
 from app.api.v1.users import api as users_ns
@@ -9,6 +9,7 @@ from app.api.v1.auth import api as auth_ns
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from app.extensions import db, bcrypt
+
 
 
 jwt = JWTManager()
@@ -22,6 +23,20 @@ def create_app(config_class="config.DevelopmentConfig"):
     bcrypt.init_app(app)
     jwt.init_app(app)
     db.init_app(app)
+
+    with app.app_context():
+        db.create_all()
+
+    #  Hard coded webpages for now
+    @app.route('/index')
+    @app.route('/index.html')
+    def index_page():
+        return render_template('index.html')
+
+    @app.route('/login')
+    @app.route('/login.html')
+    def login_page():
+        return render_template('login.html')
 
     # Register the users namespace
     api.add_namespace(users_ns, path='/api/v1/users')
