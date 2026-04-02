@@ -3,7 +3,7 @@ import glob
 import os
 
 # Connect to (or create) the database
-db_file = 'hbnb.db'
+db_file = 'development.db'
 
 # Remove old DB to start fresh each run
 if os.path.exists(db_file):
