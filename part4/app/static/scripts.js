@@ -56,13 +56,41 @@ async function loginUser(email, password){
 function checkAuthentication() {
     const token     = getCookie('token');
     const loginLink = document.getElementById('login-link');
+    const addReviewSection = document.getElementById('add-review');
  
     if (!token) {
+        console.log("USER NOT authenticated");
+        
+        // Show login button (index page behavior)
         loginLink.style.display = 'block';
-        fetchPlaces(null);
+
+        // Hide review section (place page behavior)
+        if (addReviewSection) {
+            addReviewSection.style.display = 'none'
+        }
+
+         // 🔥 IMPORTANT: fetch places (index page)
+        if (document.getElementById('places-list')) {
+            fetchPlaces(null);
+        }
+
     } else {
-        loginLink.style.display = 'none';
-        fetchPlaces(token);
+        console.log("User authenticated");
+        
+        // Hide login button
+        if (loginLink) {
+            loginLink.style.display = 'none';
+        }
+
+        // Show review section
+        if (addReviewSection) {
+            addReviewSection.style.display = 'block';
+        }
+
+        // 🔥 IMPORTANT: fetch places with token
+        if (document.getElementById('places-list')) {
+            fetchPlaces(token);
+        }
     }
 }
  
@@ -215,10 +243,12 @@ function filterPlacesByPrice(maxPriceValue) {
         msg.remove();
     }
 }
- 
+
+/* ── FETCH PLACE ─────────────────────────────────────────────── */
+
 /**
- * Extract the id from URL
- * 
+ * Extract the id from URL then use initPlacePage function
+ * to get id after document is loaded
  */
 
 function getPlaceIdFromURL() {
@@ -229,7 +259,11 @@ function getPlaceIdFromURL() {
 function initPlacePage() {
     const placeId = getPlaceIdFromURL()
     console.log("PLACE ID:", placeId)
+
+    const token = checkAuthentication()
+    console.log("TOKEN", token);
 }
+
 
 /* ── HELPERS ──────────────────────────────────────────────────── */
  
