@@ -38,6 +38,11 @@ def create_app(config_class="config.DevelopmentConfig"):
     def login_page():
         return render_template('login.html')
 
+    @app.route('/place')
+    @app.route('/place.html')
+    def place_page():
+        return render_template('place.html')
+
     # Register the users namespace
     api.add_namespace(users_ns, path='/api/v1/users')
     api.add_namespace(review_ns, path='/api/v1/reviews')
