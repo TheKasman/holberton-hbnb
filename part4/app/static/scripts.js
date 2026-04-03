@@ -288,13 +288,44 @@ async function fetchPlaceDetails(token, placeId) {
         });
     
         if (!response.ok){throw new Error(`${response.status} ${response.statusText}`)}
+
         const place = await response.json()
         console.log("PLACE DATA:", place);    
+        displayPlaceDetails(place)
     } catch (error) {
         console.error("Failed to fetch place details", error)
     }
 }
 
+/**
+ * Populates the place details section with API data.
+ */
+
+function displayPlaceDetails(place) {
+    const section = document.getElementById('place-details');
+
+    if (!section) return;
+
+    // Normalize fields 
+    const name = place.title ?? place.name ?? 'Unnamed Place';
+    const price = place.price ?? place.price_by_night ?? 0;
+    const description = place.description ?? 'No description available';
+    const host = place.owner
+        ? `${place.owner.first_name} ${place.owner.last_name}`
+        : 'Unknown';
+    const amenities = place.amenities?.map(a => a.name).join(', ') || 'None';
+
+    // Replace ONLY inner content (keep styling classes intact)
+    section.innerHTML = `
+        <div class="place-details place-info">
+            <h1>${escapeHtml(name)}</h1>
+            <p><strong>Host:</strong> ${escapeHtml(host)}</p>
+            <p><strong>Price per night:</strong> $${price}</p>
+            <p><strong>Description:</strong> ${escapeHtml(description)}</p>
+            <p><strong>Amenities:</strong> ${escapeHtml(amenities)}</p>
+        </div>
+    `;
+}
 
 /* ── HELPERS ──────────────────────────────────────────────────── */
  
