@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes("place.html")) {
         initPlacePage();
     }
+
+    /* Review page */
+    if (window.location.pathname.includes("add_review.html")) {
+        initAddReviewPage();
+    }
 });
 
 async function loginUser(email, password){
@@ -327,10 +332,103 @@ function displayPlaceDetails(place) {
     `;
 }
 
+/* ── ADD REVIEW PAGE ─────────────────────────────────────────── */
+
+/* Get cookie by name */
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+        const [key, ...value] = cookie.trim().split('=');
+        if (key === name) {
+            return decodeURIComponent(value.join('='));
+        }
+    }
+    return null;
+}
+
+/* Check user authentication */
+function checkAuthentication() {
+    const token = getCookie('token');
+    if (!token) {
+        window.location.href = 'index.html';
+    }
+    return token;
+}
+
+/* Get place ID from URL */
+function getPlaceIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+}
+
+/* Setup event listener */
+document.addEventListener('DOMContentLoaded', () => {
+    const reviewForm = document.getElementById('review-form');
+
+    // Only run on add_review page
+    if (!reviewForm) return;
+
+    const token = checkAuthentication();
+    const placeId = getPlaceIdFromURL();
+
+    if (!placeId) {
+        alert("Invalid place ID");
+        window.location.href = "index.html";
+        return;
+    }
+
+    reviewForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const reviewText = document.getElementById('review-text').value;
+
+        const response = await submitReview(token, placeId, reviewText);
+        handleResponse(response, reviewForm);
+    });
+});
+
+/* Make AJAX Request to Submit Review */
+async function submitReview(token, placeId, reviewText) {
+    try {
+        const response = await fetch('/api/v1/reviews', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                text: reviewText,
+                place_id: placeId
+            })
+        });
+
+        return response;
+
+    } catch (error) {
+        console.error("Error submitting review:", error);
+        return { ok: false };
+    }
+}
+
+/* Handle API response */
+function handleResponse(response, form) {
+    if (response.ok) {
+        alert('Review submitted successfully!');
+        form.reset();
+
+        // Redirect back to place page
+        const placeId = getPlaceIdFromURL();
+        window.location.href = `place.html?id=${placeId}`;
+
+    } else {
+        alert('Failed to submit review');
+    }
+}
+
 /* ── HELPERS ──────────────────────────────────────────────────── */
  
 
- /* Escapes HTML special chars before injecting into innerHTML. */
+/* Escapes HTML special chars before injecting into innerHTML. */
 function escapeHtml(str) {
     if (str == null) return '';
     return String(str)
