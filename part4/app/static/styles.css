@@ -171,3 +171,121 @@ footer {
 footer strong {
     color: var(--lego-yellow);
 }
+
+/* ── PLACE PAGE STYLING ───────────────────────────────────── */
+
+/* Main container spacing */
+#place-details {
+    margin-bottom: 2rem;
+}
+
+/* Main place card */
+.place-info {
+    background: var(--lego-white);
+    border-radius: 10px;
+    border-left: 6px solid var(--lego-blue);
+    padding: 1.5rem;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+}
+
+/* Title */
+.place-info h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    color: var(--lego-dark);
+    margin-bottom: 1rem;
+}
+
+/* Info text */
+.place-info p {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Highlight labels */
+.place-info strong {
+    color: var(--lego-blue);
+}
+
+/* ── REVIEWS SECTION ── */
+
+#reviews {
+    margin-top: 2rem;
+}
+
+#reviews h2 {
+    font-family: 'Fredoka One', cursive;
+    margin-bottom: 1rem;
+    color: var(--lego-dark);
+}
+
+/* Review cards */
+.review-card {
+    background: var(--lego-white);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid var(--lego-yellow);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+}
+
+/* ── ADD REVIEW SECTION ── */
+
+#add-review {
+    margin-top: 2rem;
+}
+
+/* Button */
+#add-review-button {
+    background-color: var(--lego-red);
+    color: var(--lego-white);
+    border: none;
+    padding: 0.6rem 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+    border-bottom: 3px solid #9e0008;
+    transition: background-color 0.15s;
+}
+
+#add-review-button:hover {
+    background-color: #c8000a;
+}
+
+/* Form container */
+.add-review.form {
+    margin-top: 1rem;
+    background: var(--lego-white);
+    padding: 1.25rem;
+    border-radius: 8px;
+    border-left: 5px solid var(--lego-yellow);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+}
+
+/* Form inputs */
+.add-review textarea,
+.add-review select {
+    width: 100%;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 2px solid var(--lego-dark);
+    font-family: 'Nunito', sans-serif;
+}
+
+/* Submit button */
+.add-review button {
+    background-color: var(--lego-blue);
+    color: var(--lego-white);
+    border: none;
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    border-bottom: 3px solid #004a80;
+}
+
+.add-review button:hover {
+    background-color: #005aa3;
+}

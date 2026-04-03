@@ -1,5 +1,6 @@
 /* Login Interaction */
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("js loaded successfully")
     const loginForm = document.getElementById('login-form');
 
     if (loginForm) {
@@ -17,6 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('places-list')) {
         setupPriceFilter();
         checkAuthentication();
+    }
+
+    /* Place page */
+    if (window.location.pathname.includes("place.html")) {
+        initPlacePage();
     }
 });
 
@@ -50,14 +56,44 @@ async function loginUser(email, password){
 function checkAuthentication() {
     const token     = getCookie('token');
     const loginLink = document.getElementById('login-link');
+    const addReviewSection = document.getElementById('add-review');
  
     if (!token) {
+        console.log("USER NOT authenticated");
+        
+        // Show login button (index page behavior)
         loginLink.style.display = 'block';
-        fetchPlaces(null);
+
+        // Hide review section (place page behavior)
+        if (addReviewSection) {
+            addReviewSection.style.display = 'none'
+        }
+
+         // 🔥 IMPORTANT: fetch places (index page)
+        if (document.getElementById('places-list')) {
+            fetchPlaces(null);
+        }
+
     } else {
-        loginLink.style.display = 'none';
-        fetchPlaces(token);
+        console.log("User authenticated");
+        
+        // Hide login button
+        if (loginLink) {
+            loginLink.style.display = 'none';
+        }
+
+        // Show review section
+        if (addReviewSection) {
+            addReviewSection.style.display = 'block';
+        }
+
+        // 🔥 IMPORTANT: fetch places with token
+        if (document.getElementById('places-list')) {
+            fetchPlaces(token);
+        }
     }
+
+    return token;
 }
  
 
@@ -209,7 +245,88 @@ function filterPlacesByPrice(maxPriceValue) {
         msg.remove();
     }
 }
- 
+
+/* ── FETCH PLACE DETAILS ───────────────────────────────────── */
+
+/**
+ * Extract the id from URL then use initPlacePage function
+ * to get id after document is loaded
+ */
+
+function getPlaceIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+}
+
+function initPlacePage() {
+    const placeId = getPlaceIdFromURL()
+    console.log("PLACE ID:", placeId)
+
+    const token = checkAuthentication()
+    console.log("TOKEN", token);
+
+    // Call API
+    fetchPlaceDetails(token, placeId)
+}
+
+/**
+ * Fetches details of a single place from the API.
+ * Includes JWT token if available.
+ */
+
+async function fetchPlaceDetails(token, placeId) {
+    try {
+        const headers = {'Content-Type': 'application/json'};
+
+    // If user is logged in include Authorization header
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`/api/v1/places/${placeId}`, {
+            method: 'GET',
+            headers
+        });
+    
+        if (!response.ok){throw new Error(`${response.status} ${response.statusText}`)}
+
+        const place = await response.json()
+        console.log("PLACE DATA:", place);    
+        displayPlaceDetails(place)
+    } catch (error) {
+        console.error("Failed to fetch place details", error)
+    }
+}
+
+/**
+ * Populates the place details section with API data.
+ */
+
+function displayPlaceDetails(place) {
+    const section = document.getElementById('place-details');
+
+    if (!section) return;
+
+    // Normalize fields 
+    const name = place.title ?? place.name ?? 'Unnamed Place';
+    const price = place.price ?? place.price_by_night ?? 0;
+    const description = place.description ?? 'No description available';
+    const host = place.owner
+        ? `${place.owner.first_name} ${place.owner.last_name}`
+        : 'Unknown';
+    const amenities = place.amenities?.map(a => a.name).join(', ') || 'None';
+
+    // Replace ONLY inner content (keep styling classes intact)
+    section.innerHTML = `
+        <div class="place-details place-info">
+            <h1>${escapeHtml(name)}</h1>
+            <p><strong>Host:</strong> ${escapeHtml(host)}</p>
+            <p><strong>Price per night:</strong> $${price}</p>
+            <p><strong>Description:</strong> ${escapeHtml(description)}</p>
+            <p><strong>Amenities:</strong> ${escapeHtml(amenities)}</p>
+        </div>
+    `;
+}
+
 /* ── HELPERS ──────────────────────────────────────────────────── */
  
 
