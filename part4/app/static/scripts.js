@@ -1,5 +1,6 @@
 /* Login Interaction */
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("js loaded successfully")
     const loginForm = document.getElementById('login-form');
 
     if (loginForm) {
@@ -17,6 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('places-list')) {
         setupPriceFilter();
         checkAuthentication();
+    }
+
+    /* Place page */
+    if (window.location.pathname.includes("place.html")) {
+        initPlacePage();
     }
 });
 
@@ -210,6 +216,21 @@ function filterPlacesByPrice(maxPriceValue) {
     }
 }
  
+/**
+ * Extract the id from URL
+ * 
+ */
+
+function getPlaceIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+}
+
+function initPlacePage() {
+    const placeId = getPlaceIdFromURL()
+    console.log("PLACE ID:", placeId)
+}
+
 /* ── HELPERS ──────────────────────────────────────────────────── */
  
 
