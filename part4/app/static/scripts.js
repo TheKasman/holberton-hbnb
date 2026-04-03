@@ -92,6 +92,8 @@ function checkAuthentication() {
             fetchPlaces(token);
         }
     }
+
+    return token;
 }
  
 
@@ -244,7 +246,7 @@ function filterPlacesByPrice(maxPriceValue) {
     }
 }
 
-/* ── FETCH PLACE ─────────────────────────────────────────────── */
+/* ── FETCH PLACE DETAILS ───────────────────────────────────── */
 
 /**
  * Extract the id from URL then use initPlacePage function
@@ -262,6 +264,35 @@ function initPlacePage() {
 
     const token = checkAuthentication()
     console.log("TOKEN", token);
+
+    // Call API
+    fetchPlaceDetails(token, placeId)
+}
+
+/**
+ * Fetches details of a single place from the API.
+ * Includes JWT token if available.
+ */
+
+async function fetchPlaceDetails(token, placeId) {
+    try {
+        const headers = {'Content-Type': 'application/json'};
+
+    // If user is logged in include Authorization header
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`/api/v1/places/${placeId}`, {
+            method: 'GET',
+            headers
+        });
+    
+        if (!response.ok){throw new Error(`${response.status} ${response.statusText}`)}
+        const place = await response.json()
+        console.log("PLACE DATA:", place);    
+    } catch (error) {
+        console.error("Failed to fetch place details", error)
+    }
 }
 
 
