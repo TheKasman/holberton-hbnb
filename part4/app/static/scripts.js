@@ -332,10 +332,23 @@ function displayPlaceDetails(place) {
             <p><strong>Price per night:</strong> $${price}</p>
             <p><strong>Description:</strong> ${escapeHtml(description)}</p>
             <p><strong>Amenities:</strong> ${escapeHtml(amenities)}</p>
-            <p><strong>Reviews:</strong></p>
-            <ul>${reviews}</ul>
         </div>
     `;
+
+    // Populate reviews into the separate #reviews-list section
+    const reviewsList = document.getElementById('reviews-list');
+    if (reviewsList) {
+        if (place.reviews && place.reviews.length > 0) {
+            reviewsList.innerHTML = place.reviews.map(r => `
+                <li class="review-card">
+                    <p><strong>Rating:</strong> ${r.rating}/5</p>
+                    <p>${escapeHtml(r.text)}</p>
+                </li>
+            `).join('');
+        } else {
+            reviewsList.innerHTML = '<li>No reviews yet.</li>';
+        }
+    }
 }
 
 /* ── ADD REVIEW PAGE ─────────────────────────────────────────── */
