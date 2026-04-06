@@ -7,6 +7,11 @@
     --lego-white: #ffffff;
     --lego-blue: #006cb7;
     --lego-gray: #cccccc;
+    --lego-green: #00a651;
+    --shadow-soft: 0 4px 0 rgba(0, 0, 0, 0.12);
+    --shadow-press: 0 2px 0 rgba(0, 0, 0, 0.2);
+
+    --radius: 12px;
 }
 
 
@@ -17,13 +22,19 @@
     font-family: 'Nunito', sans-serif;
 }
 
-body { 
+body {
 
-    background-color: #f4f4f4;
+    /* background-color: #f4f4f4; */
     color: #333;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+
+    background:
+        radial-gradient(circle at 20px 20px, rgba(0, 0, 0, 0.05) 6px, transparent 7px),
+        radial-gradient(circle at 60px 60px, rgba(0, 0, 0, 0.05) 6px, transparent 7px),
+        #f4f4f4;
+    background-size: 80px 80px;
 }
 
 li {
@@ -39,6 +50,9 @@ header {
     align-items: center;
     justify-content: space-between;
     height: 64px;
+    border-bottom: 6px solid #d4b200;
+    box-shadow: var(--shadow-soft);
+    border-radius: 0 0 16px 16px;
 }
 
 .logo {
@@ -67,7 +81,7 @@ nav a {
 }
 
 header nav a:hover {
-    background-color: rgba(0,0,0,0.08);
+    background-color: rgba(0, 0, 0, 0.08);
 }
 
 header nav a.login-button {
@@ -97,7 +111,12 @@ main {
     background: var(--lego-white);
     border-radius: 6px;
     border-left: 5px solid var(--lego-yellow);
-    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    border-left: none;
+    border-top: 6px solid var(--lego-yellow);
+
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
 }
 
 #filter label {
@@ -108,7 +127,7 @@ main {
     color: var(--lego-dark);
     white-space: nowrap;
 }
- 
+
 #price-filter {
     padding: 0.4rem 0.75rem;
     border: 2px solid var(--lego-dark);
@@ -121,7 +140,7 @@ main {
     cursor: pointer;
     transition: border-color 0.15s;
 }
- 
+
 #price-filter:focus {
     outline: none;
     border-color: var(--lego-blue);
@@ -137,19 +156,20 @@ main {
 .place-card {
     margin: 20px;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
     background: var(--lego-white);
-    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
-    transition: transform 0.12s, box-shadow 0.12s;
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.15);
+    border: 3px solid #eee;
+    transition: all 0.2s ease;
 }
 
 .place-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 0 rgba(0,0,0,0.10);
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.10);
 }
 
 .place-image {
@@ -158,6 +178,11 @@ main {
     object-fit: cover;
     border-radius: 6px;
     margin-bottom: 0.5rem;
+
+    .place-image {
+        border-radius: 12px;
+        border: 3px solid #ddd;
+    }
 }
 
 /* ── FOOTER ── */
@@ -191,7 +216,12 @@ footer strong {
     border-radius: 10px;
     border-left: 6px solid var(--lego-blue);
     padding: 1.5rem;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    border-left: none;
+    border-top: 6px solid var(--lego-blue);
+
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
 }
 
 /* Title */
@@ -228,11 +258,11 @@ footer strong {
 /* Review cards */
 .review-card {
     background: var(--lego-white);
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 1rem;
     margin-bottom: 1rem;
     border-left: 5px solid var(--lego-yellow);
-    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* ── ADD REVIEW SECTION ── */
@@ -243,16 +273,16 @@ footer strong {
 
 /* Button */
 #add-review-button {
-    background-color: var(--lego-red);
-    color: var(--lego-white);
+    background: var(--lego-red);
+    color: white;
     border: none;
-    padding: 0.6rem 1rem;
+    padding: 0.6rem 1.2rem;
     font-weight: 800;
-    text-transform: uppercase;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
-    border-bottom: 3px solid #9e0008;
-    transition: background-color 0.15s;
+
+    box-shadow: var(--shadow-soft);
+    transition: all 0.15s ease;
 }
 
 #add-review-button:hover {
@@ -266,7 +296,7 @@ footer strong {
     padding: 1.25rem;
     border-radius: 8px;
     border-left: 5px solid var(--lego-yellow);
-    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
 }
 
 /* Form inputs */
@@ -321,4 +351,45 @@ footer strong {
     font-size: 0.8rem;
     font-weight: 700;
     margin-right: 5px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: var(--shadow-press);
+}
+
+
+.details-button {
+    margin-top: auto;
+    background: var(--lego-blue);
+    color: white;
+
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+
+    border: none;
+    cursor: pointer;
+
+    box-shadow: 0 5px 0 #004a80;
+    transition: all 0.15s ease;
+}
+
+/* Hover = slight lift */
+.details-button:hover {
+    transform: translateY(-2px);
+}
+
+/* Click = press down */
+.details-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #004a80;
 }
