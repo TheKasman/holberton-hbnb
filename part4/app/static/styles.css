@@ -289,3 +289,12 @@ footer strong {
 .add-review button:hover {
     background-color: #005aa3;
 }
+
+/* Place detail image */
+.place-detail-image {
+    width: 70%;
+    height: 30em;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}

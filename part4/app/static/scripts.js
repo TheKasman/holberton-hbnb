@@ -316,6 +316,7 @@ function displayPlaceDetails(place) {
 
     // Normalize fields 
     const name = place.title ?? place.name ?? 'Unnamed Place';
+    const image = place.image_url
     const price = place.price ?? place.price_by_night ?? 0;
     const description = place.description ?? 'No description available';
     const host = place.owner
@@ -327,6 +328,12 @@ function displayPlaceDetails(place) {
     // Replace ONLY inner content (keep styling classes intact)
     section.innerHTML = `
         <div class="place-details place-info">
+         <img 
+            src="${image}" 
+            alt="${escapeHtml(name)}"
+            class="place-detail-image"
+            onerror="this.src='/static/images/default_image.png'"
+        />
             <h1>${escapeHtml(name)}</h1>
             <p><strong>Host:</strong> ${escapeHtml(host)}</p>
             <p><strong>Price per night:</strong> $${price}</p>
