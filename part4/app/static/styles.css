@@ -9,6 +9,7 @@
     --lego-gray: #cccccc;
 }
 
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -16,12 +17,17 @@
     font-family: 'Nunito', sans-serif;
 }
 
-body {
+body { 
+
     background-color: #f4f4f4;
     color: #333;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+li {
+    list-style-type: none;
 }
 
 /* ── HEADER ── */
@@ -288,4 +294,31 @@ footer strong {
 
 .add-review button:hover {
     background-color: #005aa3;
+}
+
+/* Place detail image */
+.place-detail-image {
+    max-width: 70%;
+    height: 30em;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Amenities list */
+.amenities-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0.5rem;
+}
+
+.amenities-list li {
+    background: var(--lego-gray);
+    padding: 0.3rem 0.6rem;
+    margin-bottom: 0.3rem;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-right: 5px;
 }
