@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Details</title>
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <!-- ── HEADER ── -->
     <header>
         <a href="index.html">
-            <img src="../static/images/logo.png" alt="HBnB Logo" class="logo">
+            <img src="/static/images/logo.png" alt="HBnB Logo" class="logo">
         </a>
         <nav>
             <a href="index.html" class="login-button" style="background-color: var(--lego-blue); border-bottom-color: #004a80;">Home</a>
@@ -24,43 +24,44 @@
         <!-- Place Details Section -->
         <section id="place-details">
             <!-- Place details will be populated dynamically -->
-            <div class="place-details place-info">
+            <!-- <div class="place-details place-info">
                 <h1>Big Wow Beautiful Apartment</h1>
                 <p><strong>Host:</strong> John Doe</p>
                 <p><strong>Price per night:</strong> $120</p>
                 <p><strong>Description:</strong> A big, comfortable and beautiful and modern apartment in the city center.</p>
                 <p><strong>Amenities:</strong> WiFi, Air Conditioning, Kitchen, Parking, Pool</p>
-            </div>
+            </div> -->
         </section>
 
         <!-- Reviews Section -->
         <section id="reviews">
             <h2>Reviews</h2>
             <!-- Reviews will be populated dynamically -->
+            <ul id="reviews-list"></ul>
 
             <!-- Example review card -->
-            <div class="review-card">
+            <!-- <div class="review-card">
                 <p><strong>User:</strong> Alice</p>
                 <p><strong>Rating:</strong> 5/5</p>
                 <p>Great place to stay! Very big, comfortable and beautiful.</p>
-            </div>
+            </div> -->
 
-            <div class="review-card">
+            <!-- <div class="review-card">
                 <p><strong>User:</strong> Bob</p>
                 <p><strong>Rating:</strong> 4/5</p>
                 <p>Big, comfortable and beautiful place, but there was a cockroach in the sink. I named him Billy.</p>
-            </div>
+            </div> -->
         </section>
 
         <!-- Add Review Section -->
         <section id="add-review">
             <!-- If user is already logged in-->
-            <button id="add-review-button" onclick="window.location.href='add_review.html'">
+            <button id="add-review-button" onclick="window.location.href='add_review.html?id=' + getPlaceIdFromURL()">
                 Add a Review
             </button>
 
             <!-- Inline form -->
-            <div class="add-review form">
+            <!-- <div class="add-review form">
             <h2>Add a Review</h2>
                 <form id="review-form">
                     <label for="review-text">Review:</label>
@@ -77,7 +78,7 @@
                     
                     <button type="submit">Submit</button>
                 </form>
-            </div>
+            </div> -->
         </section>
     </main>
 
