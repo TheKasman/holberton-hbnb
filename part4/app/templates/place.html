@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Details</title>
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <!-- ── HEADER ── -->
     <header>
         <a href="index.html">
-            <img src="../static/images/logo.png" alt="HBnB Logo" class="logo">
+            <img src="/static/images/logo.png" alt="HBnB Logo" class="logo">
         </a>
         <nav>
             <a href="index.html" class="login-button" style="background-color: var(--lego-blue); border-bottom-color: #004a80;">Home</a>
@@ -55,12 +55,12 @@
         <!-- Add Review Section -->
         <section id="add-review">
             <!-- If user is already logged in-->
-            <button id="add-review-button" onclick="window.location.href='add_review.html'">
+            <button id="add-review-button" onclick="window.location.href='add_review.html?id=' + getPlaceIdFromURL()">
                 Add a Review
             </button>
 
             <!-- Inline form -->
-            <div class="add-review form">
+            <!-- <div class="add-review form">
             <h2>Add a Review</h2>
                 <form id="review-form">
                     <label for="review-text">Review:</label>
@@ -77,7 +77,7 @@
                     
                     <button type="submit">Submit</button>
                 </form>
-            </div>
+            </div> -->
         </section>
     </main>
 

@@ -43,6 +43,11 @@ def create_app(config_class="config.DevelopmentConfig"):
     def place_page():
         return render_template('place.html')
 
+    @app.route('/add_review')
+    @app.route('/add_review.html')
+    def add_review_page():
+        return render_template('add_review.html')
+
     # Register the users namespace
     api.add_namespace(users_ns, path='/api/v1/users')
     api.add_namespace(review_ns, path='/api/v1/reviews')
