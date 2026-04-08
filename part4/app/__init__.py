@@ -25,6 +25,10 @@ def create_app(config_class="config.DevelopmentConfig"):
     with app.app_context():
         db.create_all()
 
+    @app.route('/', endpoint='home')
+    def root():
+        return render_template('index.html')
+
     #  Hard coded webpages for now
     @app.route('/index')
     @app.route('/index.html')
