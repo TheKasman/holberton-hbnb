@@ -156,7 +156,9 @@ class PlaceResource(Resource):
                     "id": review.id,
                     "text": review.text,
                     "rating": review.rating,
-                    "user_id": review.user_id
+                    "user_id": review.user_id,
+                    "first_name": review.author.first_name if review.author else "Unknown",
+                    "last_name": review.author.last_name if review.author else ""
                 } for review in place.reviews
             ]
         }, 200

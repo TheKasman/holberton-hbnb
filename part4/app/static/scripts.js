@@ -353,6 +353,7 @@ function displayPlaceDetails(place) {
         if (place.reviews && place.reviews.length > 0) {
             reviewsList.innerHTML = place.reviews.map(r => `
                 <li class="review-card">
+                    <p><strong>${escapeHtml(r.first_name)} ${escapeHtml(r.last_name)}</strong></p>
                     <p><strong>Rating:</strong> ${r.rating}/5</p>
                     <p>${escapeHtml(r.text)}</p>
                 </li>
