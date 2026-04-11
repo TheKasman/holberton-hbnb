@@ -12,7 +12,7 @@
   --lego-white: #ffffff;
 
   /* softened border */
-  --lego-border: 2px solid rgba(0,0,0,0.4);
+  --lego-border: 1px solid #ddd;
 }
 
 /* ── RESET ── */
@@ -130,11 +130,12 @@ main {
   gap: 2rem;
 }
 
-/* ── PLACE CARD (CLEAN VERSION) ── */
+/* ── PLACE CARD── */
 .place-card {
   background: #FFFFFA;
-  padding: 1.25rem;
-  border-radius: 16px;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 10px;
 
   display: flex;
   flex-direction: column;
@@ -221,10 +222,10 @@ button:active {
 .review-card,
 .add-review.form {
   background: white;
-  border-radius: 14px;
+  border-radius: 10px;
   border: var(--lego-border);
-
-  padding: 1.25rem;
+  margin: 20px;
+  padding: 10px;
   box-shadow: 0 4px 0 rgba(0,0,0,0.15);
 }
 
