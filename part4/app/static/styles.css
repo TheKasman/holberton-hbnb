@@ -5,11 +5,26 @@
   --lego-red: #F7321B;
   --lego-blue: #27A6F5;
   --lego-yellow: #F5EF69;
-  --lego-green: #66bb6a;
 
   --lego-bg: #e8f5e9;
   --lego-dark: #222;
   --lego-white: #ffffff;
+
+  /* additional colors for accents and variety - pat*/
+  --lego-green: #00853A;
+  --lego-green-dark: #005F2A;
+  --lego-red-dark: #9e0008;
+  --lego-blue-dark: #004a80;
+  --lego-navy: #1B2A4A;
+
+  /* Stud plate - pat*/
+  --plate-bg: #E8E5DF;
+  --stud-hi: #F3F1ED;
+  --stud-body: #D4CFCA;
+  --stud-rim: rgba(0, 0, 0, .045);
+
+  /* Max-width for all content zones */
+  --max-w: 1180px;
 
   /* softened border */
   --lego-border: 1px solid #ddd;
@@ -24,127 +39,310 @@
 }
 
 body {
-  background-color: var(--lego-bg);
-  color: var(--lego-dark);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background-color: var(--plate-bg);
+
+    /* 3-layer stud baseplate texture:
+       Layer 1 — elliptical top-left highlight (raises the disc)
+       Layer 2 — solid stud body circle
+       Layer 3 — soft shadow ring at disc base               */
+    background-image:
+        radial-gradient(ellipse at 33% 28%,
+            var(--stud-hi)   0,
+            transparent      58%),
+        radial-gradient(circle,
+            var(--stud-body) 8px,
+            transparent      8.5px),
+        radial-gradient(circle,
+            transparent      9px,
+            var(--stud-rim)  11px,
+            transparent      12.5px);
+    background-size: 28px 28px;
+
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 li {
   list-style: none;
 }
 
-/* ── HEADER ── */
+/* ── HEADER OUTER — full-width background ── */
+/* The <header> tag itself stays full-width for the white bg.
+   We constrain the inner content using padding that scales
+   with the viewport so it mirrors main's centering.            */
 header {
-  background-color: #fff59d;
-  padding: 1rem 1.5rem;
-  height: 72px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  border-bottom: var(--lego-border);
-  box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    background-color: var(--lego-white);
+    color: #000;
+    border-bottom: 3px solid var(--lego-red);
+    box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* On small screens: 20px edge (matches card margin).
+       On screens wider than 1600px: auto-calculated padding
+       so the logo/nav align with the centered main content.    */
+    padding: 0 max(20px, calc((100vw - 1600px) / 2 + 20px));
 }
+
 
 .logo {
   height: 40px;
 }
 
 /* ── NAV ── */
-header nav {
-  display: flex;
-  gap: 0.5rem;
+nav {
+  display: flex
 }
-
 nav a {
-  display: inline-block;
-
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-
-  border: var(--lego-border);
-  border-bottom-width: 5px;
-
-  background: var(--lego-white);
-  color: var(--lego-dark);
-
-  transition: all 0.1s ease;
+    color: var(--lego-dark);
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.45rem 0.9rem;
+    border-radius: 6px;
+    transition: background-color 0.15s, color 0.15s;
 }
 
-nav a.login-button {
-  background: var(--lego-red);
-  color: white;
+header nav a.login-button {
+    background-color: var(--lego-red);
+    color: var(--lego-white);
+    /* LEGO brick press-down shadow */
+    box-shadow: 0 3px 0 var(--lego-red-dark);
+    border-bottom: none;       /* remove old border-bottom */
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: transform .1s, box-shadow .1s, background-color .1s;
 }
 
-nav a:hover {
-  transform: translateY(-2px);
+header nav a.login-button:hover {
+    background-color: #c8000a;
 }
 
-nav a:active {
-  transform: translateY(2px);
-  border-bottom-width: 2px;
+header nav a.login-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--lego-red-dark);
+}
+
+/* ── HOME nav link — plain text, not a button ──
+   index.html gives Home a .login-button class + inline blue bg.
+   This overrides that so only Login looks like a button.         */
+header nav a[href="index.html"].login-button {
+    background-color: transparent !important;
+    color: var(--lego-dark);
+    box-shadow: none;
+    border-bottom: none;
+}
+
+header nav a[href="index.html"].login-button:hover {
+    background-color: rgba(0,0,0,.07) !important;
+    color: var(--lego-dark);
 }
 
 /* ── MAIN ── */
+/* Max-width container so content doesn't stretch on wide screens.
+   Horizontal padding is 0 because the card's own margin: 20px
+   already provides the 20px edge gap we need for alignment.      */
 main {
-  padding: 2.5rem;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem 0;
+    flex: 1;
 }
 
+/* ── HERO HEADLINE ── */
+/* Sits between header and filter. Left/right margin: 20px
+   matches card margin so all edges stay aligned.
+   Flex row: text on left, floating image on right.        */
+#hero {
+    margin: 0 20px 2rem 20px;
+    padding: 2.5rem 0 2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    position: relative;       /* anchor for floating image */
+    overflow: visible;
+}
+
+/* ── LEFT: text block ── */
+.hero-text {
+    flex: 1;
+    max-width: 600px;
+    z-index: 1;
+}
+
+/* Main headline — Fredoka One for LEGO playful feel */
+.hero-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 400;
+    color: var(--lego-dark);
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.01em;
+}
+
+/* "Brick" in LEGO red */
+.hero-accent {
+    color: var(--lego-red);
+}
+
+/* Subheadline */
+.hero-subtitle {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    font-weight: 600;
+    color: #666;
+    line-height: 1.65;
+    max-width: 480px;
+}
+
+/* ── RIGHT: floating image wrap ── */
+/* The wrap gives us control over size and the float effect.
+   flex: 0 0 auto stops it from stretching.                */
+.hero-image-wrap {
+    flex: 0 0 auto;
+    width: clamp(220px, 30vw, 420px);  /* scales from tablet to 1920px */
+    position: relative;
+    z-index: 1;
+    /* Float illusion: drop shadow cast below and to the side */
+    filter: drop-shadow(0px 24px 32px rgba(0,0,0,.18))
+            drop-shadow(0px 8px 12px rgba(0,0,0,.12));
+    /* Gentle infinite bob animation */
+    animation: hero-float 4s ease-in-out infinite;
+}
+
+/* The image itself — contain so the full photo is always visible */
+.hero-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    /* Slightly tilt for a dynamic, playful LEGO-set-on-display feel */
+    transform: perspective(800px) rotateY(-6deg) rotateX(2deg);
+    transition: transform 0.4s ease;
+    border-radius: 12px;
+}
+
+.hero-image-wrap:hover .hero-image {
+    /* Straightens on hover — feels like picking it up */
+    transform: perspective(800px) rotateY(0deg) rotateX(0deg) scale(1.03);
+}
+
+/* Floating bob keyframes */
+@keyframes hero-float {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+}
+
+/* ── RESPONSIVE: stack vertically on smaller screens ── */
+@media (max-width: 768px) {
+    #hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 2rem 0 1rem 0;
+    }
+
+    .hero-image-wrap {
+        width: clamp(180px, 60vw, 280px);
+        /* On mobile, centre the image under the text */
+        align-self: center;
+    }
+
+    .hero-title {
+        font-size: clamp(1.8rem, 7vw, 2.4rem);
+    }
+}
 /* ── FILTER ── */
 #filter {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  margin-bottom: 2rem;
-  padding: 1rem 1.5rem;
-
-  background: #fff59d;
-  border-radius: 14px;
-  border: var(--lego-border);
-
-  box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 0 20px 2rem 20px;   /* left/right 20px = matches card edge */
+    padding: 0.9rem 1.25rem;
+    background: rgba(255,255,255,.92);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.75);
+    box-shadow: 0 2px 14px rgba(0,0,0,.07);
 }
 
+#filter label {
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--lego-gray);  /* muted — label is secondary */
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ── Visually style the <select> as a pill row ──
+   We can't turn a <select> into pill buttons without JS,
+   but we can make it look clean and intentional.
+   The select stays fully functional for scripts.js.     */
 #price-filter {
-  padding: 0.5rem 0.8rem;
-  border-radius: 8px;
-  border: var(--lego-border);
-  font-weight: 700;
-  background: white;
-  cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.45rem 2rem 0.45rem 0.9rem;
+    border: 1.5px solid #C8C4BB;
+    border-radius: 100px;           /* pill shape */
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    background-color: #fff;
+    color: var(--lego-dark);
+    cursor: pointer;
+    transition: border-color 0.15s;
+    /* Custom chevron arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231a1a1a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+}
+#price-filter:focus {
+    outline: none;
+    border-color: var(--lego-blue);
+    box-shadow: 0 0 0 2px rgba(0,108,183,.15);
+}
+
+#price-filter:hover {
+    border-color: #94A3B8;
 }
 
 /* ── GRID ── */
+/* gap: 0 because .place-card already has margin: 20px which
+   creates the visual gutter between cards. Adding gap on top
+   of margin was doubling the spacing and making cards cramped. */
 #places-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 0;
 }
 
-/* ── PLACE CARD── */
+/* ── PLACE CARD ── */
+/* Fixed parameters set by Holberton — do not change:
+   margin: 20px | padding: 10px | border: 1px solid #ddd | border-radius: 10px */
 .place-card {
-  background: #FFFFFA;
-  padding: 10px;
-  margin: 20px;
-  border-radius: 10px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-
-  border: var(--lego-border);
-  box-shadow: 0 4px 0 rgba(0,0,0,0.15);
-
-  transition: all 0.12s ease;
+    margin: 20px;           /* fixed — required */
+    padding: 10px;          /* fixed — required */
+    border: 1px solid #ddd; /* fixed — required */
+    border-radius: 10px;    /* fixed — required */
+    background: var(--lego-white);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5;
+    transition: transform 0.12s, box-shadow 0.12s;
 }
 
 /* subtle LEGO accent (top strip instead of full color) */
@@ -158,37 +356,85 @@ main {
 }
 
 /* color variation but subtle */
-.place-card:nth-child(4n+1)::before { background: var(--lego-red); }
-.place-card:nth-child(4n+2)::before { background: var(--lego-blue); }
-.place-card:nth-child(4n+3)::before { background: var(--lego-yellow); }
-.place-card:nth-child(4n+4)::before { background: var(--lego-green); }
+.place-card:nth-child(4n+1)::before {
+  background: var(--lego-red);
+}
+
+.place-card:nth-child(4n+2)::before {
+  background: var(--lego-blue);
+}
+
+.place-card:nth-child(4n+3)::before {
+  background: var(--lego-yellow);
+}
+
+.place-card:nth-child(4n+4)::before {
+  background: var(--lego-green);
+}
 
 /* hover */
 .place-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 7px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 7px 0 rgba(0, 0, 0, 0.2);
 }
 
 /* text hierarchy */
-.place-card h3 {
-  font-size: 1.05rem;
-  font-weight: 800;
+
+/* ── CARD TITLE ── */                  */
+.place-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.7rem;          /* was implicitly inheriting ~1rem+ */
+    font-weight: 400;            /* Fredoka One is already visually bold */
+    color: var(--lego-dark);
+    line-height: 1.3;
+
+    /* Fixed height for 2 lines = font-size × line-height × 2 lines
+       0.95rem × 1.3 × 2 = ~2.47rem — this locks every title to same height */
+    /* min-height: calc(0.7rem * 1.3 * 2); */
 }
 
+/* ── CARD PRICE TEXT ── */
 .place-card p {
-  font-size: 0.85rem;
-  opacity: 0.8;
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
 }
-
-/* ── IMAGE ── */
+/* ── CARD IMAGE ── */
+/* Taller image = more visual space for the photo.
+   object-fit: cover ensures every image fills this box
+   identically regardless of the original photo dimensions. */
 .place-image {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-
-  border-radius: 12px;
+    width: 100%;
+    height: 200px;           /* was 160px — extra 40px gives photos room */
+    object-fit: cover;
+    object-position: center; /* always shows the centre of the photo */
+    border-radius: 8px;
+    display: block;          /* removes any inline spacing gap below image */
+    margin-bottom: 0.5rem;
 }
 
+/* ── CARD PRICE ── */
+/* Two-level hierarchy: label is small and muted,
+   the dollar amount is large and dark — eye goes
+   straight to the number, label provides context. */
+.card-price {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #999;              /* muted label */
+    margin: 0.3rem 0;
+    line-height: 1;
+}
+
+.card-price-amount {
+
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;        /* large and prominent */
+    font-weight: 400;         /* Fredoka One is visually bold already */
+    color: var(--lego-dark);  /* strong dark — stands out on white card */
+    line-height: 1.2;
+    margin-top: 0.1rem;
+    letter-spacing: 0.01em;
+}
 /* ── BUTTONS ── */
 button,
 #add-review-button {
@@ -217,6 +463,16 @@ button:active {
   border-bottom-width: 2px;
 }
 
+/* ── DETAILS BUTTON — pinned to card bottom ── */
+/* margin-top: auto is the key — in a flex column it pushes
+   this element to the very bottom of the card every time,
+   regardless of how tall the title or price text is above it. */
+.details-button {
+    margin-top: auto;        /* this is the entire fix for button alignment */
+    padding-top: 0.5rem;     /* breathing room between price text and button */
+    width: 100%;
+}
+
 /* ── DETAIL / CARDS ── */
 .place-info,
 .review-card,
@@ -226,7 +482,7 @@ button:active {
   border: var(--lego-border);
   margin: 20px;
   padding: 10px;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
 }
 
 /* ── FORM ── */
@@ -258,18 +514,22 @@ button:active {
 }
 
 /* ── FOOTER ── */
+/* Navy background with legible white text.
+   Padding matches header (20px) so footer text aligns too.
+   Red top border ties it to the header bottom border.       */
 footer {
-  background: #222;
-  color: #eee;
+    background-color: #1B2A4A;
+    color: rgba(255,255,255,.80);   /* white at 80% — clearly readable */
+    text-align: center;
+    padding: 1.5rem 20px;           /* 20px matches header + card edge  */
+    margin-top: auto;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-top: 4px solid var(--lego-red);
+}
 
-  text-align: center;
-  padding: 1.5rem;
-
-  margin-top: auto;
-
-  font-size: 0.75rem;
-  font-weight: 800;
-  text-transform: uppercase;
-
-  border-top: 3px solid var(--lego-yellow);
+footer strong {
+    color: var(--lego-yellow);      /* "HBnB" in yellow — clearly visible */
 }

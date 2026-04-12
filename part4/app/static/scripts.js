@@ -187,7 +187,7 @@ function createPlaceCard(place) {
             onerror="this.src='/static/images/default_image.png'"
         />
         <h2>${escapeHtml(name)}</h2>
-        <p>Price per night: $${price.toFixed(2)}</p>
+        <p class="card-price">Price per night: <span class="card-price-amount">$${price.toFixed(2)}</span></p>
         <button class="details-button"
                 onclick="window.location.href='place.html?id=${encodeURIComponent(place.id)}'">
             View Details
