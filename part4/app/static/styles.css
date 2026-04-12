@@ -533,3 +533,351 @@ footer {
 footer strong {
     color: var(--lego-yellow);      /* "HBnB" in yellow — clearly visible */
 }
+
+/* ══════════════════════════════════════════════════════
+   LOGIN PAGE
+   Two-column layout: brand panel (aside) left,
+   form panel (article) right.
+   Original #login-form structure untouched.
+   Header, footer, body already handled above.
+══════════════════════════════════════════════════════ */
+
+/* ── LOGIN MAIN ──
+   Centres the two-column card vertically and horizontally
+   on the stud plate background.
+   :has() targets main ONLY on the login page so the
+   index page main layout is completely unaffected.      */
+/* ── LOGIN MAIN ── */
+main:has(#login-form) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 64px - 72px);
+    padding: 2rem 40px;      /* more breathing room on wide screens */
+}
+
+/* ── TWO-COLUMN WRAPPER ──
+   max-width is the hard cap — card never grows beyond this.
+   margin: 0 auto centres it when viewport is wider.          */
+.login-layout {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;       /* ← hard cap on total card width */
+    min-width: 0;            /* prevents flex blowout */
+    margin: 0 auto;          /* centres the card at any viewport width */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow:
+        0 8px 40px rgba(0,0,0,.13),
+        0 2px 8px rgba(0,0,0,.07);
+    align-self: center;
+}
+
+/* ── LEFT: BRAND PANEL (aside.login-brand) ──
+   Navy background with stud texture — same navy as
+   the footer so the brand language stays consistent.   */
+.login-brand {
+    flex: 0 0 42%;
+    background-color: var(--lego-navy);
+    background-image:
+        radial-gradient(ellipse at 33% 28%,
+            rgba(255,255,255,.06) 0,
+            transparent           58%),
+        radial-gradient(circle,
+            rgba(255,255,255,.09) 8px,
+            transparent            8.5px),
+        radial-gradient(circle,
+            transparent            9px,
+            rgba(0,0,0,.12)        11px,
+            transparent            12.5px);
+    background-size: 28px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    /* Red top accent — same as header bottom border */
+    border-top: 5px solid var(--lego-red);
+}
+
+/* Inner grouping div — purely for flex centering */
+.login-brand-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+}
+
+/* Logo — larger than header, floating bob animation */
+.login-logo {
+    height: 80px;
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+    animation: hero-float 4s ease-in-out infinite;
+}
+
+/* Brand name h2 — supplementary heading in the aside */
+.login-brand-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.8rem;
+    font-weight: 400;
+    color: var(--lego-white);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin: 0;
+}
+
+/* Brand tagline */
+.login-brand-sub {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: rgba(255,255,255,.55);
+    line-height: 1.6;
+    max-width: 220px;
+}
+
+/* ── DECORATIVE STUD DOTS ──
+   aria-hidden in HTML so screen readers skip these.    */
+.login-studs {
+    display: flex;
+    gap: 10px;
+    margin-top: 0.5rem;
+}
+
+.lstud {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: block;
+    position: relative;
+    box-shadow: 0 3px 0 rgba(0,0,0,.35);
+}
+
+/* Top-left highlight recreates the raised stud look */
+.lstud::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.30);
+}
+
+.lstud.red    { background: var(--lego-red); }
+.lstud.yellow { background: var(--lego-yellow); }
+.lstud.blue   { background: var(--lego-blue); }
+.lstud.green  { background: var(--lego-green); }
+
+/* ── RIGHT: FORM PANEL ──
+   flex: 0 0 58% gives the form panel 58% of the card width.
+   Using % instead of px means it scales proportionally with
+   the card but never grows past the card's own max-width.
+   ↓ CHANGE 58% HERE to adjust form panel vs brand panel ratio ↓ */
+.login-form-panel {
+    flex: 0 0 58%;           /* ← adjust % to change form width ratio */
+    min-width: 0;            /* prevents flex blowout on wide screens */
+    background: rgba(255,255,255,.97);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 3.5rem;    /* generous padding keeps content from hitting edges */
+    border-top: 5px solid transparent;
+    overflow: hidden;        /* clips any content that might escape */
+}
+
+
+/* ── Override global header flex for the login form header ──
+   The global header rule sets display:flex + space-between
+   which splits h1 and p side by side. This resets it.        */
+.login-form-header {
+flex: 1;       /* don't stretch, only take up needed space */
+ display: flex;
+ flex-direction: column;
+justify-content: center;
+margin-bottom: 1.75em;
+padding: 3rem 3.5rem; 
+}
+
+.login-form-header h1,
+.login-form-header p {
+    display: block;          /* force each onto its own row */
+               /* shrink to fit content, don't stretch full width */
+}
+/* h1 — primary page heading, lives in the form panel */
+.login-welcome {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--lego-dark);
+    margin-bottom: 0.35rem;
+    line-height: 1.1;
+}
+
+/* Supporting instructions under the h1 */
+.login-instructions {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #888;
+    line-height: 1.5;
+}
+
+/* ── FORM CARD (#login-form) ──
+   Resets the single-column card styles — the panel
+   is now the visual card so the form is borderless.   */
+#login-form {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: none;
+}
+
+/* h3 — form section label, quiet and muted */
+#login-form h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.25rem;
+    text-align: left;
+}
+
+/* ── FORM LABELS ── */
+#login-form label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #666;
+    margin-bottom: 0.35rem;
+    margin-top: 1rem;
+    display: block;
+}
+
+/* First label — no top margin needed */
+#login-form label:first-of-type {
+    margin-top: 0;
+}
+
+/* ── FORM INPUTS ── */
+#login-form input[type="email"],
+#login-form input[type="password"] {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid #D0CCBF;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--lego-dark);
+    background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+    display: block;
+}
+
+#login-form input[type="email"]:focus,
+#login-form input[type="password"]:focus {
+    border-color: var(--lego-red);
+    box-shadow: 0 0 0 3px rgba(247,50,27,.12);
+}
+
+#login-form input[type="email"]:hover,
+#login-form input[type="password"]:hover {
+    border-color: #94A3B8;
+}
+
+/* ── SUBMIT BUTTON ──
+   Inherits red bg, border-bottom, border-radius,
+   font-weight, text-transform from global button rule.
+   We only add full-width and spacing here.            */
+#login-form button[type="submit"] {
+    width: 100%;
+    margin-top: 1.75rem;
+    padding: 0.75rem 1.2rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+}
+
+/* ── RESPONSIVE — stack on small screens ── */
+@media (max-width: 640px) {
+    .login-layout {
+        flex-direction: column;
+        max-width: 420px;
+    }
+
+    .login-brand {
+        flex: 0 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    .login-logo {
+        height: 56px;
+    }
+
+    .login-brand-title {
+        font-size: 2rem;
+    }
+
+/* ── RIGHT: FORM PANEL — width control ──
+   flex: 0 0 520px stops the panel growing with viewport.
+   ↓ CHANGE 520px HERE to adjust the form panel width ↓  */
+.login-form-panel {
+    flex: 0 0 520px;         /* ← adjust this value to change form width */
+    max-width: 520px;        /* ← keep same as above */
+    background: rgba(255,255,255,.97);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 2.5rem;
+    border-top: 5px solid transparent;
+}
+
+/* ── RESPONSIVE — stack on small screens ── */
+@media (max-width: 640px) {
+    .login-layout {
+        flex-direction: column;
+        max-width: 420px;
+    }
+
+    .login-brand {
+        flex: 0 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    .login-logo {
+        height: 56px;
+    }
+
+    .login-brand-title {
+        font-size: 2rem;
+    }
+
+    .login-form-panel {
+.login-form-panel {
+    flex: 0 0 58%;           /* ← adjust % to change form width ratio */
+    min-width: 0;            /* prevents flex blowout on wide screens */
+    background: rgba(255,255,255,.97);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 3.5rem;    /* generous padding keeps content from hitting edges */
+    border-top: 5px solid transparent;
+    overflow: hidden;        /* clips any content that might escape */
+}
+    }
+}
+}
