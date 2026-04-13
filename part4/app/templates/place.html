@@ -30,7 +30,7 @@
 
                 <!-- LEFT: IMAGE -->
                 <div class="place-image-container">
-                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688" alt="Sample Place"
+                    <img src="" alt="Sample Place"
                         class="place-detail-image">
                 </div>
 
@@ -52,9 +52,7 @@
                         <li>Pool</li>
                     </ul>
                 </div>
-
             </div>
-
         </section>
 
         <!-- ── REVIEWS ── -->
@@ -62,33 +60,21 @@
 
             <div class="reviews-header">
                 <h2>Reviews</h2>
-
-                <!-- SAME BUTTON, just moved -->
                 <button id="add-review" onclick="window.location.href='add_review.html?id=' + getPlaceIdFromURL()">
-                Add a Review
-            </button>
+                    Add a Review
+                </button>
             </div>
-
-            <div class="reviews-container">
-
-                <div class="review-card">
+            <div id="reviews-list">
+                <ul>
+                    <li><div class="review-card">
                     <p><strong>John Doe</strong></p>
                     <p class="review-rating">Rating: 5/5</p>
                     <p>Amazing stay! Everything was perfect.</p>
                 </div>
-
-                <div class="review-card">
-                    <p><strong>Jane Smith</strong></p>
-                    <p class="review-rating">Rating: 4/5</p>
-                    <p>Very nice place, clean and comfortable.</p>
-                </div>
-
+                    </li>
+                </ul>
             </div>
-
         </section>
-
-
-
     </main>
 
     <!-- ── FOOTER ── -->

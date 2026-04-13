@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Review</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
     <!-- ── HEADER ── -->
     <header>
@@ -20,22 +22,23 @@
 
     <!-- ── MAIN ── -->
     <main>
-        <!-- Add something to idfentify the place you're reviewing -->
-        <form id="review-form">
-            <h2>Add a Review</h2>
-            <label for="review">Your Review:</label>
-            <textarea id="review-text" name="review" required></textarea>
-            <label for="rating">Rating:</label>
-            <select id="rating" name="rating" required>
-                <!-- Options for rating -->
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-            <button type="submit">Submit Review</button>
-        </form>
+        <!-- Add something to identify the place you're reviewing -->
+        <div class="review-layout">
+            <form id="review-form" class="review-card-form">
+                <h2>Add a Review</h2>
+                <label for="review-text">Your Review:</label>
+                <textarea id="review-text" name="review" required></textarea>
+                <label for="rating">Rating:</label>
+                <select id="rating" name="rating" required>
+                    <option value="5">5 - Excellent</option>
+                    <option value="4">4 - Good</option>
+                    <option value="3">3 - Average</option>
+                    <option value="2">2 - Poor</option>
+                    <option value="1">1 - Terrible</option>
+                </select>
+                <button type="submit">Submit Review</button>
+            </form>
+        </div>
     </main>
 
     <!-- ── FOOTER ── -->
@@ -45,4 +48,5 @@
 
     <script src="/static/scripts.js"></script>
 </body>
+
 </html>
