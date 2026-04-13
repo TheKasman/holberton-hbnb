@@ -1,18 +1,18 @@
-# HBnB - Part 3: Authentication & Database Integration
-
-This part introduces **authentication, authorization, and persistent storage** using SQLAlchemy. The application is upgraded from an in-memory prototype to a **secure, database-backed API** ready for deployment.
+# HBnB - Part 4: Simple Web Client
+ 
+This part implements the Presentation layer as a dynamic web client using HTML5, CSS3, and JavaScript ES6, connecting to the back-end API built in previous parts.
 
 ---
 
 ## 📁 Contents
 
-### ⚙️ Setup II
+### ⚙️ Setup
 
 1. Clone the repository
 
 ```bash
 git clone https://github.com/TheKasman/holberton-hbnb.git
-cd holberton-hbnb/part3
+cd holberton-hbnb/part4
 ```
 
 2. Install the required packages:
@@ -26,9 +26,10 @@ The `requirements.txt` file contains:
 ```
 flask
 flask-restx
+flask-bcrypt
 flask-jwt-extended
 sqlalchemy
-bcrypt
+flask-sqlalchemy
 ```
 
 3. Run the application:
@@ -37,232 +38,138 @@ bcrypt
 python3 run.py
 ```
 
-The API will be available at `http://127.0.0.1:5000`.
+The application will be available at `http://127.0.0.1:5000/login`.
 
----
-
-### 🔐 Authentication
-
-This part introduces **JWT-based authentication** using `Flask-JWT-Extended`.
-
-* Users must log in to receive a **JWT token**
-* Protected endpoints require a valid token
-* Tokens must be included in requests:
-
+4. Seed the database with initial data:
 ```bash
-Authorization: Bearer <your_token>
+python3 seed_users.py
+python3 seed_admin.py
+python3 seed_amenities.py
+python3 seed_places.py
+python3 seed_reviews.py
 ```
 
 ---
 
-### 🔀 API Endpoints
-
-Flask-RESTx auto-generates Swagger documentation. Once the app is running, visit:
-
-```
-http://127.0.0.1:5000/api/v1/
-```
-
-#### 🔑 Authentication — `/api/v1/auth`
-
-| Method | Endpoint             | Description                      |
-| ------ | -------------------- | -------------------------------- |
-| POST   | `/api/v1/auth/login` | Authenticate user and return JWT |
+### 📄 Pages
+ 
+| Page | File | Description |
+|------|------|-------------|
+| Login | `login.html` | Authentication form with JWT session management |
+| List of Places | `index.html` | Main page displaying all places with price filtering |
+| Place Details | `place.html` | Detailed view of a place including amenities and reviews |
+| Add Review | `add_review.html` | Authenticated form to submit a review for a place |
 
 ---
 
-#### 👤 Users — `/api/v1/users`
-
-| Method | Endpoint                  | Description                     |
-| ------ | ------------------------- | ------------------------------- |
-| POST   | `/api/v1/users/`          | Register a new user             |
-| GET    | `/api/v1/users/`          | Retrieve all users (admin only) |
-| GET    | `/api/v1/users/<user_id>` | Retrieve a user by ID           |
-| PUT    | `/api/v1/users/<user_id>` | Update a user                   |
-
----
-
-#### 🏠 Places — `/api/v1/places`
-
-| Method | Endpoint                    | Description                          |
-| ------ | --------------------------- | ------------------------------------ |
-| POST   | `/api/v1/places/`           | Create a place (authenticated users) |
-| GET    | `/api/v1/places/`           | Retrieve all places                  |
-| GET    | `/api/v1/places/<place_id>` | Retrieve a place by ID               |
-| PUT    | `/api/v1/places/<place_id>` | Update a place (owner/admin only)    |
-
----
-
-#### 🛠️ Amenities — `/api/v1/amenities`
-
-| Method | Endpoint                         | Description                    |
-| ------ | -------------------------------- | ------------------------------ |
-| POST   | `/api/v1/amenities/`             | Create an amenity (admin only) |
-| GET    | `/api/v1/amenities/`             | Retrieve all amenities         |
-| GET    | `/api/v1/amenities/<amenity_id>` | Retrieve an amenity            |
-| PUT    | `/api/v1/amenities/<amenity_id>` | Update an amenity (admin only) |
+### 🖥️ Pages & Features
+ 
+**Login (`login.html`)**
+ 
+- Submits email and password to the API login endpoint via `fetch` POST
+- Stores the returned JWT token in a cookie on success
+- Redirects to `index.html` after successful login
+- Displays an error message on failure
+ 
+**List of Places (`index.html`)**
+ 
+- Fetches all places from the API on page load
+- Dynamically renders each place as a card (`.place-card`) with name, price per night, and a "View Details" button
+- Shows the login link only when the user is **not** authenticated
+- Filters displayed places by maximum price client-side (options: 10, 50, 100, All) without page reload
+ 
+**Place Details (`place.html`)**
+ 
+- Extracts the place ID from the URL query string (`?id=<place_id>`)
+- Fetches and displays full place information: host, price, description, amenities, and reviews
+- Shows the add-review section only when the user is authenticated
+ 
+**Add Review (`add_review.html`)**
+ 
+- Redirects unauthenticated users to `index.html` immediately on load
+- Submits review text and place ID to the API via authenticated `fetch` POST
+- Displays a success message and clears the form on success
+- Displays an error message on failure
 
 ---
 
-#### 📝 Reviews — `/api/v1/reviews`
-
-| Method | Endpoint                      | Description          |
-| ------ | ----------------------------- | -------------------- |
-| POST   | `/api/v1/reviews/`            | Create a review      |
-| GET    | `/api/v1/reviews/`            | Retrieve all reviews |
-| GET    | `/api/v1/reviews/<review_id>` | Retrieve a review    |
-| PUT    | `/api/v1/reviews/<review_id>` | Update a review      |
-| DELETE | `/api/v1/reviews/<review_id>` | Delete a review      |
-
----
-
-## 🧠 Business Logic & Persistence Layer
-
-In Part 3, the application transitions from in-memory storage to a **relational database using SQLAlchemy ORM**.
-
-All entities are now mapped to database tables and persist across sessions.
-
----
-
-### **User** (`app/models/user.py`)
-
-Represents an authenticated user of the system.
-
-| Attribute    | Type     | Rules               |
-| ------------ | -------- | ------------------- |
-| `id`         | UUID     | Primary key         |
-| `first_name` | String   | Required            |
-| `last_name`  | String   | Required            |
-| `email`      | String   | Required, unique    |
-| `password`   | String   | Hashed using bcrypt |
-| `is_admin`   | Boolean  | Default: False      |
-| `created_at` | DateTime | Auto-set            |
-| `updated_at` | DateTime | Auto-updated        |
-
----
-
-### **Place** (`app/models/place.py`)
-
-Represents a property listed by a user.
-
-| Attribute     | Type             | Rules            |
-| ------------- | ---------------- | ---------------- |
-| `id`          | UUID             | Primary key      |
-| `title`       | String           | Required         |
-| `description` | String           | Optional         |
-| `price`       | Float            | Must be positive |
-| `latitude`    | Float            | Valid range      |
-| `longitude`   | Float            | Valid range      |
-| `owner_id`    | ForeignKey(User) | Required         |
-| `created_at`  | DateTime         | Auto-set         |
-| `updated_at`  | DateTime         | Auto-updated     |
-
----
-
-### **Review** (`app/models/review.py`)
-
-Represents feedback left by a user.
-
-| Attribute    | Type              | Rules        |
-| ------------ | ----------------- | ------------ |
-| `id`         | UUID              | Primary key  |
-| `text`       | String            | Required     |
-| `rating`     | Integer           | 1–5          |
-| `user_id`    | ForeignKey(User)  | Required     |
-| `place_id`   | ForeignKey(Place) | Required     |
-| `created_at` | DateTime          | Auto-set     |
-| `updated_at` | DateTime          | Auto-updated |
-
----
-
-### **Amenity** (`app/models/amenity.py`)
-
-Represents a feature available in a place.
-
-| Attribute    | Type     | Rules        |
-| ------------ | -------- | ------------ |
-| `id`         | UUID     | Primary key  |
-| `name`       | String   | Required     |
-| `created_at` | DateTime | Auto-set     |
-| `updated_at` | DateTime | Auto-updated |
-
----
-
-### **Entity Relationships**
-
-```
-User ──< Place        (one user owns many places)
-User ──< Review       (one user writes many reviews)
-Place ──< Review      (one place has many reviews)
-Place >──< Amenity    (many-to-many relationship)
-```
-
----
-
-## 🗄️ Database Configuration
-
-### Development
-
-* Uses **SQLite**
-* Lightweight and easy to set up
-
-### Production
-
-* Configured for **MySQL**
-* Scalable and suitable for real-world deployment
-
-Environment-based configuration ensures smooth transition between environments.
-
----
-
-## 🔐 Authorization Rules
-
-* Only authenticated users can create/update resources
-* Only **owners** can modify their own places/reviews
-* Only **admins** can:
-
-  * View all users
-  * Manage amenities
-
----
-
-## 📊 Database Design
-
-The database schema is visualized using **Mermaid.js** ER diagrams, ensuring:
-
-* Clear entity relationships
-* Proper normalization
-* Scalable structure
-
----
-
-## 🧪 Testing
-
-1. Install pytest:
-
+### 🧪 Testing
+ 
+**Verify seed data (optional)**
+ 
+After seeding, you can confirm the database was populated correctly by running:
+ 
 ```bash
-pip3 install pytest
+cd holberton-hbnb/part4
+python3 test.py
 ```
+ 
+This queries `development.db` directly and prints all users, places, amenities, and reviews. Example output:
+ 
+```
+Tables: [('users',), ('amenities',), ('places',), ('place_amenity',), ('reviews',)]
+ 
+Users:
+('John', 'Doe', 'john@example.com', ...)
+ 
+Places:
+('def-456', 'Beach House', 'Nice place', 100.0, 'abc-123')
 
-2. Run tests:
+Place Details (with owner):
+('Cheap Studio', 'Cozy and affordable', 9.0, 48.8566, 2.3522, 'Admin User', 'admin@example.com')
+ 
+Amenities:
+('Wi-Fi', 'ghi-789', ...)
+ 
+Reviews:
+('jkl-012', 'Amazing stay!', 5, 'john@example.com', 'Beach House')
+```
+ 
+If any section prints `No X found`, re-run the corresponding seed file before proceeding.
 
+---
+ 
+Start the application before running any browser-based tests:
+ 
 ```bash
-cd holberton-hbnb/part3
-pytest
+cd holberton-hbnb/part4
+python3 run.py
+```
+ 
+**Login**
+- Submit valid credentials → verify redirect to `index.html` and cookie set in browser DevTools
+- Submit invalid credentials → verify error message is displayed
+ 
+**List of Places**
+- Log in and visit `index.html` → verify place cards are rendered
+- Use the price filter dropdown → verify cards show/hide without a page reload
+- To test as an unauthenticated user, delete the `token` cookie via browser DevTools (Application → Cookies) or by running the following in the browser console → verify the login link reappears
+```javascript
+document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
 ```
 
+**Place Details**
+- Click "View Details" on a place card → verify all details, amenities, and reviews are displayed
+- While authenticated → verify the add-review section is visible
+- While unauthenticated → verify the add-review section is hidden
+ 
+**Add Review**
+- While authenticated, submit a review → verify success message and form reset
+- To test as an unauthenticated user, delete the `token` cookie via browser DevTools (Application → Cookies) or by running the following in the browser console, then visit `add_review.html` directly → verify redirect to `index.html`
+```javascript
+document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+```
+ 
 ---
 
 ## 🎯 Objectives
-
-**Part 3** enhances the architecture by introducing:
-
-* **Authentication Layer** – JWT-based security
-* **Authorization Layer** – Role-based access control
-* **Persistence Layer** – SQLAlchemy with SQLite/MySQL
-
-This replaces the in-memory storage from Part 2 and prepares the application for production environments.
-
+ 
+**Part 4** connects the full HBnB stack by building the client layer, applying the **Fetch API** and **cookie-based JWT sessions** to interact with the RESTful back-end from Parts 2 and 3:
+ 
+- **HTML5 / CSS3** — Structure and styling across all pages
+- **JavaScript ES6** — DOM manipulation, AJAX requests, client-side filtering
+- **JWT cookies** — Authentication state management without page reloads
+ 
 ---
 
 ## 👥 Authors
