@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Place Details</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
     <!-- ── HEADER ── -->
     <header>
@@ -13,73 +15,80 @@
             <img src="/static/images/logo.png" alt="HBnB Logo" class="logo">
         </a>
         <nav>
-            <a href="index.html" class="login-button" style="background-color: var(--lego-blue); border-bottom-color: #004a80;">Home</a>
+            <a href="index.html" class="login-button"
+                style="background-color: var(--lego-blue); border-bottom-color: #004a80;">Home</a>
             <a href="login.html" id="login-link" class="login-button">Login</a>
         </nav>
     </header>
- 
+
     <!-- ── MAIN ── -->
     <main>
+        <!-- ── PLACE DETAILS ── -->
+        <section id="place-details" class="place-details">
 
-        <!-- Place Details Section -->
-        <section id="place-details">
-            <!-- Place details will be populated dynamically -->
-            <!-- <div class="place-details place-info">
-                <h1>Big Wow Beautiful Apartment</h1>
-                <p><strong>Host:</strong> John Doe</p>
-                <p><strong>Price per night:</strong> $120</p>
-                <p><strong>Description:</strong> A big, comfortable and beautiful and modern apartment in the city center.</p>
-                <p><strong>Amenities:</strong> WiFi, Air Conditioning, Kitchen, Parking, Pool</p>
-            </div> -->
+            <div class="place-layout">
+
+                <!-- LEFT: IMAGE -->
+                <div class="place-image-container">
+                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688" alt="Sample Place"
+                        class="place-detail-image">
+                </div>
+
+                <!-- RIGHT: INFO -->
+                <div class="place-info">
+                    <h1>Luxury LEGO Apartment</h1>
+
+                    <p><strong>Host:</strong> John Doe</p>
+                    <p><strong>Price per night:</strong> $120</p>
+                    <p><strong>Description:</strong> A beautiful LEGO-inspired apartment with modern amenities and
+                        playful design.</p>
+
+                    <p><strong>Amenities:</strong></p>
+                    <ul class="amenities-list">
+                        <li>WiFi</li>
+                        <li>Air Conditioning</li>
+                        <li>Kitchen</li>
+                        <li>Parking</li>
+                        <li>Pool</li>
+                    </ul>
+                </div>
+
+            </div>
+
         </section>
 
-        <!-- Reviews Section -->
-        <section id="reviews">
-            <h2>Reviews</h2>
-            <!-- Reviews will be populated dynamically -->
-            <ul id="reviews-list"></ul>
+        <!-- ── REVIEWS ── -->
+        <section id="reviews" class="reviews-section">
 
-            <!-- Example review card -->
-            <!-- <div class="review-card">
-                <p><strong>User:</strong> Alice</p>
-                <p><strong>Rating:</strong> 5/5</p>
-                <p>Great place to stay! Very big, comfortable and beautiful.</p>
-            </div> -->
+            <div class="reviews-header">
+                <h2>Reviews</h2>
 
-            <!-- <div class="review-card">
-                <p><strong>User:</strong> Bob</p>
-                <p><strong>Rating:</strong> 4/5</p>
-                <p>Big, comfortable and beautiful place, but there was a cockroach in the sink. I named him Billy.</p>
-            </div> -->
-        </section>
-
-        <!-- Add Review Section -->
-        <section id="add-review">
-            <!-- If user is already logged in-->
-            <button id="add-review-button" onclick="window.location.href='add_review.html?id=' + getPlaceIdFromURL()">
+                <!-- SAME BUTTON, just moved -->
+                <button id="add-review" onclick="window.location.href='add_review.html?id=' + getPlaceIdFromURL()">
                 Add a Review
             </button>
+            </div>
 
-            <!-- Inline form -->
-            <!-- <div class="add-review form">
-            <h2>Add a Review</h2>
-                <form id="review-form">
-                    <label for="review-text">Review:</label>
-                    <textarea id="review-text" name="review-text" required></textarea>
+            <div class="reviews-container">
 
-                    <label for="rating">Rating:</label>
-                    <select id="rating" name="rating" required>
-                        <option value="5">5 - Excellent</option>
-                        <option value="4">4 - Good</option>
-                        <option value="3">3 - Average</option>
-                        <option value="2">2 - Poor</option>
-                        <option value="1">1 - Terrible</option>
-                    </select>
-                    
-                    <button type="submit">Submit</button>
-                </form>
-            </div> -->
+                <div class="review-card">
+                    <p><strong>John Doe</strong></p>
+                    <p class="review-rating">Rating: 5/5</p>
+                    <p>Amazing stay! Everything was perfect.</p>
+                </div>
+
+                <div class="review-card">
+                    <p><strong>Jane Smith</strong></p>
+                    <p class="review-rating">Rating: 4/5</p>
+                    <p>Very nice place, clean and comfortable.</p>
+                </div>
+
+            </div>
+
         </section>
+
+
+
     </main>
 
     <!-- ── FOOTER ── -->
@@ -89,4 +98,5 @@
 
     <script src="/static/scripts.js"></script>
 </body>
+
 </html>

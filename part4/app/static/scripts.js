@@ -329,22 +329,26 @@ function displayPlaceDetails(place) {
 
     // Replace ONLY inner content (keep styling classes intact)
     section.innerHTML = `
-        <div class="place-details place-info">
-         <img 
-            src="${image}" 
-            alt="${escapeHtml(name)}"
-            class="place-detail-image"
-            onerror="this.src='/static/images/default_image.png'"
-        />
-            <h1>${escapeHtml(name)}</h1>
-            <p><strong>Host:</strong> ${escapeHtml(host)}</p>
-            <p><strong>Price per night:</strong> $${price}</p>
-            <p><strong>Description:</strong> ${escapeHtml(description)}</p>
-            <p><strong>Amenities:</strong></p>
-            <ul class="amenities-list">
-            ${amenitiesList}
-            </ul>
-        </div>
+        
+            <div class="place-layout">
+                <!-- LEFT: IMAGE -->
+                <div class="place-image-container">
+                    <img src="${image}" alt="${escapeHtml(name)}"
+                        class="place-detail-image">
+                </div>
+                <!-- RIGHT: INFO -->
+                <div class="place-info">
+                    <h1>${escapeHtml(name)}</h1>
+                    <p><strong>Host:</strong> ${escapeHtml(host)}</p>
+                    <p><strong>Price per night:</strong> $${price}</p>
+                    <p><strong>Description:</strong> ${escapeHtml(description)}</p>
+
+                    <p><strong>Amenities:</strong></p>
+                    <ul class="amenities-list">
+                       ${amenitiesList}
+                    </ul>
+                </div>
+            </div>
     `;
 
     // Populate reviews into the separate #reviews-list section

@@ -702,3 +702,179 @@ main:has(#login-form) {
         padding: 2rem 1.5rem;
     }
 }
+
+/* ═══════════════════════════════════════
+   PLACE PAGE LAYOUT
+═══════════════════════════════════════ */
+
+.place-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 0 20px;
+}
+
+/* IMAGE */
+.place-image-container {
+    border-radius: 10px;
+    overflow: hidden;
+
+    box-shadow:
+        0 4px 0 rgba(0, 0, 0, 0.15),
+        0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.place-detail-image {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    height: auto;
+}
+
+/* INFO CARD (reuse required styling but enhance) */
+.place-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* TITLE spacing */
+.place-info h1 {
+    font-size: 2.2rem;
+    margin: 1.2rem 0 1.2rem;
+}
+
+/* CONTENT spacing + size */
+.place-info p {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+}
+
+.place-info::before {
+    content: "";
+    display: block;
+    height: 6px;
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 1rem;
+    background: var(--lego-blue);
+}
+
+.amenities-list li {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    margin: 0.25rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* LEGO COLORS */
+.amenities-list li:nth-child(4n+1) {
+    background: var(--lego-red);
+}
+
+.amenities-list li:nth-child(4n+2) {
+    background: var(--lego-blue);
+}
+
+.amenities-list li:nth-child(4n+3) {
+    background: var(--lego-yellow);
+    color: black;
+}
+
+.amenities-list li:nth-child(4n+4) {
+    background: var(--lego-green);
+}
+
+.place-image-container {
+    border-radius: 10px;
+    overflow: hidden;
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    box-shadow:
+        0 4px 0 rgba(0, 0, 0, 0.15),
+        0 10px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    /* 👈 KEY */
+    justify-content: center;
+}
+
+.place-image-container:hover,
+.amenities-list li:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 8px 0 rgba(0, 0, 0, 0.18),
+        0 16px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* REVIEWS */
+
+#reviews-section {
+    margin: 20px;
+}
+
+.reviews-container {
+    margin: 20px;
+    display: grid;
+    gap: 1rem;
+}
+
+/* Already required class, just enhancing */
+.review-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* HEADER ALIGNMENT */
+.reviews-header {
+    margin: 0 20px 1rem 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px 0 20px;
+
+}
+
+/* MATCH CONTENT WIDTH */
+.reviews-container {
+    margin: 0 20px;
+    display: grid;
+    gap: 1rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+
+    /* Remove grid margin control */
+    .place-layout {
+        grid-template-columns: 1fr;
+        margin: 0 20px;
+    }
+
+    /* REMOVE extra margin on info */
+    .place-info {
+        margin: 0;
+        /* 👈 key fix */
+    }
+
+    /* OPTIONAL: spacing between image and card */
+    .place-image-container {
+        margin-bottom: 20px;
+    }
+}
