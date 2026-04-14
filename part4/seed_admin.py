@@ -6,20 +6,34 @@ app = create_app()
 with app.app_context():
     db.create_all()  # ensure tables exist
 
-    admin_email = "admin@example.com"
-    admin = User.query.filter_by(email=admin_email).first()
+    admins = [
+        {
+            "first_name": "Admin",
+            "last_name": "User",
+            "email": "admin@example.com",
+            "password": "password123"
+        },
+        {
+            "first_name": "Admin",
+            "last_name": "User",
+            "email": "pat@example.com",
+            "password": "patrick"
+        },
+    ]
 
-    if not admin:
-        admin = User(
-            first_name="Admin",
-            last_name="User",
-            email=admin_email,
-            is_admin=True
-        )
-        admin.set_password("password123")  # hashes the password
+    for admin_data in admins:
+        admin = User.query.filter_by(email=admin_data["email"]).first()
+        if not admin:
+            admin = User(
+                first_name=admin_data["first_name"],
+                last_name=admin_data["last_name"],
+                email=admin_data["email"],
+                is_admin=True
+            )
+            admin.set_password(admin_data["password"])
+            db.session.add(admin)
+            print(f"Admin {admin_data['email']} created!")
+        else:
+            print(f"Admin {admin_data['email']} already exists")
 
-        db.session.add(admin)
-        db.session.commit()
-        print("Admin user created!")
-    else:
-        print("Admin already exists")
+    db.session.commit()

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,13 +15,26 @@
             <img src="/static/images/logo.png" alt="HBnB Logo" class="logo">
         </a>
         <nav>
-            <a href="index.html" class="login-button" style="background-color: var(--lego-blue); border-bottom-color: #004a80;">Home</a>
+            <a href="index.html" class="login-button">Home</a>
             <a href="login.html" id="login-link" class="login-button">Login</a>
         </nav>
     </header>
 
     <!-- ── MAIN ── -->
     <main>
+        <!-- ── HERO HEADLINE ── -->
+        <section id="hero">
+            <div class="hero-text">
+                <h1 class="hero-title">Find Your Perfect <span class="hero-accent">Brick</span> Getaway</h1>
+                <p class="hero-subtitle">Hand-built LEGO homes across 50+ cities worldwide. Every stay is one of a kind.
+                </p>
+            </div>
+
+            <div class="hero-image-wrap">
+                <img src="/static/images/hero-image.jpg" alt="Featured LEGO stay" class="hero-image"
+                    onerror="this.style.display='none'">
+            </div>
+        </section>
         <section id="filter">
             <label for="price-filter">Max Price:</label>
             <select id="price-filter">
@@ -30,7 +44,7 @@
 
         <section id="places-list">
             <!-- List of places will be populated dynamically -->
-            
+
         </section>
     </main>
 
@@ -41,4 +55,5 @@
 
     <script src="/static/scripts.js"></script>
 </body>
+
 </html>
