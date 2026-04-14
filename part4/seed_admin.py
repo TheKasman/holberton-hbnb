@@ -6,7 +6,7 @@ app = create_app()
 with app.app_context():
     db.create_all()  # ensure tables exist
 
-    admin_email = "admin@example.com"
+    admin_email = "pat@example.com"
     admin = User.query.filter_by(email=admin_email).first()
 
     if not admin:
@@ -16,7 +16,7 @@ with app.app_context():
             email=admin_email,
             is_admin=True
         )
-        admin.set_password("password123")  # hashes the password
+        admin.set_password("patrick")  # hashes the password
 
         db.session.add(admin)
         db.session.commit()

@@ -19,18 +19,55 @@
     </header>
  
     <!-- ── MAIN ── -->
-    <main>
-        <form id="login-form">
-            <h2>Login</h2>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            <button type="submit">Login</button>
-        </form>
-    </main>
+<!-- ── MAIN ── -->
+<main>
+    <section class="login-layout" aria-label="Login page">
+
+        <!-- ── Brand panel: supplementary to the main form action ── -->
+        <aside class="login-brand">
+            <div class="login-brand-inner">
+                <img src="/static/images/logo.png"
+                     alt="HBnB Logo"
+                     class="login-logo">
+                <h2 class="login-brand-title">HBnB</h2>
+                <p class="login-brand-sub">
+                    Hand-built LEGO homes across<br>50+ cities worldwide.
+                </p>
+                <!-- Decorative stud dots — LEGO colour palette, aria-hidden
+                     so screen readers skip purely visual decoration          -->
+                <div class="login-studs" aria-hidden="true">
+                    <span class="lstud red"></span>
+                    <span class="lstud yellow"></span>
+                    <span class="lstud blue"></span>
+                    <span class="lstud green"></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ── Form panel: the primary purpose of this page ── -->
+        <article class="login-form-panel">
+            <header class="login-form-header">
+                <h1 class="login-welcome">Welcome back 👋</h1>
+                <p class="login-instructions">
+                    Enter your details to access your account.
+                </p>
+            </header>
+
+            <form id="login-form">
+                <h3>Login</h3>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </article>
+
+    </section>
+</main>
 
     <!-- ── FOOTER ── -->
     <footer>
