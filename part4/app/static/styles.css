@@ -50,6 +50,7 @@
     padding: 0;
     font-family: var(--font-nunito);
 }
+
 body {
     background-color: var(--plate-bg);
     background-image:
@@ -62,6 +63,7 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 li {
     list-style: none;
 }
@@ -90,6 +92,7 @@ header {
     justify-content: space-between;
     padding: 0 max(20px, calc((100vw - 1600px) / 2 + 20px));
 }
+
 .logo {
     height: 40px;
 }
@@ -99,6 +102,7 @@ nav {
     display: flex;
     gap: var(--gap-sm);
 }
+
 nav a {
     color: var(--lego-dark);
     text-decoration: none;
@@ -110,15 +114,18 @@ nav a {
     border-radius: var(--radius-sm);
     transition: background-color var(--transition-base), color var(--transition-base);
 }
+
 nav a.login-button {
     background-color: var(--lego-red);
     color: var(--lego-white);
     box-shadow: 0 3px 0 var(--lego-red-dark);
     transition: transform .1s, box-shadow .1s, background-color .1s;
 }
+
 nav a.login-button:hover {
     background-color: #c8000a;
 }
+
 nav a.login-button:active {
     transform: translateY(2px);
     box-shadow: 0 1px 0 var(--lego-red-dark);
@@ -130,6 +137,7 @@ nav a[href="index.html"].login-button {
     color: var(--lego-dark);
     box-shadow: none;
 }
+
 nav a[href="index.html"].login-button:hover {
     background-color: rgba(0, 0, 0, .07) !important;
 }
@@ -154,12 +162,15 @@ main {
     position: relative;
     overflow: visible;
 }
+
 .hero-text {
     flex: 1;
     max-width: 600px;
     z-index: 1;
 }
-.hero-title, h1 {
+
+.hero-title,
+h1 {
     font-family: var(--font-fredoka);
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 400;
@@ -168,9 +179,11 @@ main {
     margin-bottom: 0.75rem;
     letter-spacing: 0.01em;
 }
+
 .hero-accent {
     color: var(--lego-red);
 }
+
 .hero-subtitle {
     font-size: clamp(0.95rem, 1.5vw, 1.1rem);
     font-weight: 600;
@@ -178,6 +191,7 @@ main {
     line-height: 1.65;
     max-width: 480px;
 }
+
 .hero-image-wrap {
     flex: 0 0 auto;
     width: clamp(220px, 30vw, 420px);
@@ -186,6 +200,7 @@ main {
     filter: drop-shadow(var(--shadow-drop));
     animation: hero-float 4s ease-in-out infinite;
 }
+
 .hero-image {
     width: 100%;
     height: auto;
@@ -195,12 +210,21 @@ main {
     transition: transform 0.4s ease;
     border-radius: var(--radius-full);
 }
+
 .hero-image-wrap:hover .hero-image {
     transform: perspective(800px) rotateY(0deg) rotateX(0deg) scale(1.03);
 }
+
 @keyframes hero-float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-12px); }
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
 }
 
 /* ── FILTER ── */
@@ -216,6 +240,7 @@ main {
     border: 1px solid rgba(255, 255, 255, .75);
     box-shadow: 0 2px 14px rgba(0, 0, 0, .07);
 }
+
 #filter label {
     font-weight: 800;
     font-size: 0.75rem;
@@ -225,6 +250,7 @@ main {
     white-space: nowrap;
     flex-shrink: 0;
 }
+
 #price-filter {
     appearance: none;
     -webkit-appearance: none;
@@ -242,11 +268,13 @@ main {
     background-position: right 0.7rem center;
     transition: border-color var(--transition-base);
 }
+
 #price-filter:focus {
     outline: none;
     border-color: var(--lego-blue);
     box-shadow: 0 0 0 2px rgba(0, 108, 183, .15);
 }
+
 #price-filter:hover {
     border-color: #94A3B8;
 }
@@ -271,6 +299,7 @@ main {
     gap: var(--gap-sm);
     transition: transform var(--transition-hover), box-shadow var(--transition-hover);
 }
+
 .place-card::before {
     content: "";
     height: 6px;
@@ -279,14 +308,28 @@ main {
     margin-bottom: var(--gap-sm);
     display: block;
 }
-.place-card:nth-child(4n+1)::before { background: var(--lego-red); }
-.place-card:nth-child(4n+2)::before { background: var(--lego-blue); }
-.place-card:nth-child(4n+3)::before { background: var(--lego-yellow); }
-.place-card:nth-child(4n+4)::before { background: var(--lego-green); }
+
+.place-card:nth-child(4n+1)::before {
+    background: var(--lego-red);
+}
+
+.place-card:nth-child(4n+2)::before {
+    background: var(--lego-blue);
+}
+
+.place-card:nth-child(4n+3)::before {
+    background: var(--lego-yellow);
+}
+
+.place-card:nth-child(4n+4)::before {
+    background: var(--lego-green);
+}
+
 .place-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 7px 0 rgba(0, 0, 0, 0.2);
 }
+
 .place-card h2 {
     font-family: var(--font-fredoka);
     font-size: 1rem;
@@ -294,11 +337,13 @@ main {
     color: var(--lego-dark);
     line-height: 1.3;
 }
+
 .place-card p {
     font-size: 0.8rem;
     color: var(--text-gray);
     margin: 0;
 }
+
 .place-image {
     width: 100%;
     height: 200px;
@@ -308,6 +353,7 @@ main {
     display: block;
     margin-bottom: var(--gap-sm);
 }
+
 .card-price {
     font-size: 0.75rem;
     font-weight: 600;
@@ -315,6 +361,7 @@ main {
     margin: 0.3rem 0;
     line-height: 1;
 }
+
 .card-price-amount {
     font-family: var(--font-fredoka);
     font-size: 1.1rem;
@@ -326,7 +373,8 @@ main {
 }
 
 /* ── BUTTONS ── */
-button, #add-review-button {
+button,
+#add-review-button {
     background: var(--lego-red);
     color: white;
     border: var(--lego-border);
@@ -338,13 +386,16 @@ button, #add-review-button {
     cursor: pointer;
     transition: all 0.1s ease;
 }
+
 button:hover {
     transform: translateY(-2px);
 }
+
 button:active {
     transform: translateY(2px);
     border-bottom-width: 2px;
 }
+
 .details-button {
     margin-top: auto;
     padding-top: 0.5rem;
@@ -352,7 +403,9 @@ button:active {
 }
 
 /* ── DETAIL PAGES ── */
-.place-info, .review-card, .add-review.form {
+.place-info,
+.review-card,
+.add-review.form {
     background: white;
     border-radius: var(--radius-lg);
     border: var(--lego-border);
@@ -360,10 +413,12 @@ button:active {
     padding: 10px;
     box-shadow: var(--shadow-md);
 }
+
 .place-details {
     margin: 20px auto;
     padding: 2rem 20px;
 }
+
 .place-detail-image {
     width: 100%;
     height: auto;
@@ -372,7 +427,8 @@ button:active {
 }
 
 /* ── FORM ── */
-.add-review textarea, .add-review select {
+.add-review textarea,
+.add-review select {
     width: 100%;
     margin-bottom: 0.75rem;
     padding: 0.5rem;
@@ -406,6 +462,7 @@ footer {
     letter-spacing: 0.05em;
     border-top: 4px solid var(--lego-red);
 }
+
 footer strong {
     color: var(--lego-yellow);
 }
@@ -420,6 +477,7 @@ main:has(#login-form) {
     min-height: calc(100vh - 64px - 72px);
     padding: 2rem 40px;
 }
+
 .login-layout {
     display: flex;
     width: 100%;
@@ -430,6 +488,7 @@ main:has(#login-form) {
     overflow: hidden;
     box-shadow: var(--shadow-lg);
 }
+
 .login-brand {
     flex: 0 0 42%;
     background-color: var(--lego-navy);
@@ -439,6 +498,7 @@ main:has(#login-form) {
     padding: 3rem 2rem;
     border-top: 5px solid var(--lego-red);
 }
+
 .login-brand-inner {
     display: flex;
     flex-direction: column;
@@ -446,6 +506,7 @@ main:has(#login-form) {
     text-align: center;
     gap: 1rem;
 }
+
 .login-logo {
     height: 80px;
     width: auto;
@@ -453,6 +514,7 @@ main:has(#login-form) {
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .3));
     animation: hero-float 4s ease-in-out infinite;
 }
+
 .login-brand-title {
     font-family: var(--font-fredoka);
     font-size: 2.8rem;
@@ -462,6 +524,7 @@ main:has(#login-form) {
     line-height: 1;
     margin: 0;
 }
+
 .login-brand-sub {
     font-size: 0.88rem;
     font-weight: 600;
@@ -469,11 +532,13 @@ main:has(#login-form) {
     line-height: 1.6;
     max-width: 220px;
 }
+
 .login-studs {
     display: flex;
     gap: 10px;
     margin-top: 0.5rem;
 }
+
 .lstud {
     width: 22px;
     height: 22px;
@@ -482,6 +547,7 @@ main:has(#login-form) {
     position: relative;
     box-shadow: 0 3px 0 rgba(0, 0, 0, .35);
 }
+
 .lstud::after {
     content: '';
     position: absolute;
@@ -492,10 +558,23 @@ main:has(#login-form) {
     border-radius: 50%;
     background: rgba(255, 255, 255, .30);
 }
-.lstud.red { background: var(--lego-red); }
-.lstud.yellow { background: var(--lego-yellow); }
-.lstud.blue { background: var(--lego-blue); }
-.lstud.green { background: var(--lego-green); }
+
+.lstud.red {
+    background: var(--lego-red);
+}
+
+.lstud.yellow {
+    background: var(--lego-yellow);
+}
+
+.lstud.blue {
+    background: var(--lego-blue);
+}
+
+.lstud.green {
+    background: var(--lego-green);
+}
+
 .login-form-panel {
     flex: 0 0 58%;
     min-width: 0;
@@ -507,27 +586,33 @@ main:has(#login-form) {
     border-top: 5px solid transparent;
     overflow: hidden;
 }
+
 .login-form-header {
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin-bottom: 1.75rem;
-    padding: 3rem 3.5rem;
+    padding: 0.5rem;
+    flex: 2 1 0%;
 }
+
 .login-welcome {
     font-family: var(--font-fredoka);
-    font-size: 1.8rem;
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
     font-weight: 400;
     color: var(--lego-dark);
     margin-bottom: 0.35rem;
-    line-height: 1.1;
+    line-height: 1.2;
 }
+
 .login-instructions {
-    font-size: 0.875rem;
+    font-size: clamp(0.8rem, 1.8vw, 0.95rem);
     font-weight: 600;
     color: var(--text-gray-dark);
     line-height: 1.5;
 }
+
 #login-form {
     background: transparent;
     border: none;
@@ -538,6 +623,7 @@ main:has(#login-form) {
     flex-direction: column;
     gap: 0;
 }
+
 #login-form h3 {
     font-family: var(--font-fredoka);
     font-size: 0.75rem;
@@ -548,6 +634,7 @@ main:has(#login-form) {
     margin-bottom: 1.25rem;
     text-align: left;
 }
+
 #login-form label {
     font-size: 0.75rem;
     font-weight: 800;
@@ -558,10 +645,13 @@ main:has(#login-form) {
     margin-top: 1rem;
     display: block;
 }
+
 #login-form label:first-of-type {
     margin-top: 0;
 }
-#login-form input[type="email"], #login-form input[type="password"] {
+
+#login-form input[type="email"],
+#login-form input[type="password"] {
     width: 100%;
     padding: 0.65rem 0.9rem;
     border: 1.5px solid var(--border-color);
@@ -574,14 +664,20 @@ main:has(#login-form) {
     transition: border-color var(--transition-base), box-shadow var(--transition-base);
     outline: none;
 }
-#login-form input[type="email"]:focus, #login-form input[type="password"]:focus,
-.review-card-form textarea:focus, .review-card-form select:focus {
+
+#login-form input[type="email"]:focus,
+#login-form input[type="password"]:focus,
+.review-card-form textarea:focus,
+.review-card-form select:focus {
     border-color: var(--lego-red);
     box-shadow: 0 0 0 3px rgba(247, 50, 27, .12);
 }
-#login-form input[type="email"]:hover, #login-form input[type="password"]:hover {
+
+#login-form input[type="email"]:hover,
+#login-form input[type="password"]:hover {
     border-color: #94A3B8;
 }
+
 #login-form button[type="submit"] {
     width: 100%;
     margin-top: 1.75rem;
@@ -597,29 +693,36 @@ main:has(#login-form) {
         align-items: flex-start;
         padding: 2rem 0 1rem 0;
     }
+
     .hero-image-wrap {
         width: clamp(180px, 60vw, 280px);
         align-self: center;
     }
+
     .hero-title {
         font-size: clamp(1.8rem, 7vw, 2.4rem);
     }
 }
+
 @media (max-width: 640px) {
     .login-layout {
         flex-direction: column;
         max-width: 420px;
     }
+
     .login-brand {
         flex: 0 0 auto;
         padding: 2rem 1.5rem;
     }
+
     .login-logo {
         height: 56px;
     }
+
     .login-brand-title {
         font-size: 2rem;
     }
+
     .login-form-panel {
         padding: 2rem 1.5rem;
     }
@@ -644,6 +747,7 @@ main:has(#login-form) {
     display: flex;
     justify-content: center;
 }
+
 .place-detail-image {
     width: 100%;
     max-width: 100%;
@@ -663,15 +767,18 @@ main:has(#login-form) {
     background: white;
     box-shadow: var(--shadow-md);
 }
+
 .place-info h1 {
     font-size: 2.2rem;
     margin: 1.2rem 0 1.2rem;
 }
+
 .place-info p {
     font-size: 1rem;
     margin-bottom: 0.8rem;
     line-height: 1.5;
 }
+
 .place-info::before {
     content: "";
     display: block;
@@ -693,14 +800,26 @@ main:has(#login-form) {
     color: white;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.amenities-list li:nth-child(4n+1) { background: var(--lego-red); }
-.amenities-list li:nth-child(4n+2) { background: var(--lego-blue); }
+
+.amenities-list li:nth-child(4n+1) {
+    background: var(--lego-red);
+}
+
+.amenities-list li:nth-child(4n+2) {
+    background: var(--lego-blue);
+}
+
 .amenities-list li:nth-child(4n+3) {
     background: var(--lego-yellow);
     color: black;
 }
-.amenities-list li:nth-child(4n+4) { background: var(--lego-green); }
-.place-image-container:hover, .amenities-list li:hover {
+
+.amenities-list li:nth-child(4n+4) {
+    background: var(--lego-green);
+}
+
+.place-image-container:hover,
+.amenities-list li:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-hover);
 }
@@ -709,11 +828,13 @@ main:has(#login-form) {
 #reviews-section {
     margin: 20px;
 }
+
 .reviews-container {
     margin: 20px;
     display: grid;
     gap: 1rem;
 }
+
 .review-card {
     margin: 20px;
     padding: 10px;
@@ -722,6 +843,7 @@ main:has(#login-form) {
     background: white;
     box-shadow: var(--shadow-md);
 }
+
 .reviews-header {
     margin: 0 20px 1rem 20px;
     display: flex;
@@ -729,6 +851,7 @@ main:has(#login-form) {
     align-items: center;
     padding: 0 20px;
 }
+
 .reviews-container {
     margin: 0 20px;
     display: grid;
@@ -741,9 +864,11 @@ main:has(#login-form) {
         grid-template-columns: 1fr;
         margin: 0 20px;
     }
+
     .place-info {
         margin: 0;
     }
+
     .place-image-container {
         margin-bottom: 20px;
     }
@@ -759,6 +884,7 @@ main:has(#login-form) {
     min-height: calc(100vh - 64px - 72px);
     padding: 2rem 20px;
 }
+
 .review-card-form {
     width: 100%;
     max-width: 600px;
@@ -770,6 +896,7 @@ main:has(#login-form) {
     display: flex;
     flex-direction: column;
 }
+
 .review-card-form::before {
     content: "";
     display: block;
@@ -779,11 +906,13 @@ main:has(#login-form) {
     border-radius: var(--radius-sm) var(--radius-sm) 0 0;
     margin-bottom: 1rem;
 }
+
 .review-card-form h2 {
     font-size: 2rem;
     font-family: var(--font-fredoka);
     margin-bottom: 1.2rem;
 }
+
 .review-card-form label {
     font-size: 0.8rem;
     font-weight: 800;
@@ -792,6 +921,7 @@ main:has(#login-form) {
     margin-top: 0.8rem;
     color: var(--text-gray);
 }
+
 .review-card-form textarea {
     width: 100%;
     min-height: 140px;
@@ -802,6 +932,7 @@ main:has(#login-form) {
     font-family: var(--font-nunito);
     font-size: 1.2rem;
 }
+
 .review-card-form select {
     width: 100%;
     padding: 0.6rem;
@@ -810,13 +941,17 @@ main:has(#login-form) {
     font-weight: 600;
     font-size: 1.2rem;
 }
-.review-card-form textarea:hover, .review-card-form select:hover {
+
+.review-card-form textarea:hover,
+.review-card-form select:hover {
     border-color: #94A3B8;
 }
-.review-card-form textarea:focus{
+
+.review-card-form textarea:focus {
     outline: none;
     border-color: var(--lego-blue);
 }
+
 .review-card-form button {
     margin-top: 1.5rem;
     padding: 1rem 2rem;
